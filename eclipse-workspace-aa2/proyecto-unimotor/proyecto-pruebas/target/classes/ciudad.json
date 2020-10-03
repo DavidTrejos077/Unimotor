@@ -1,0 +1,22 @@
+{
+	"ciudad": [
+		{
+			"ID": 1,
+			"NOMBRE": "Armenia"
+		},
+		{
+			"ID": 2,
+			"NOMBRE": "Pereira"
+		},
+		{
+			"ID": 3,
+			"NOMBRE": "Bogota"
+		},
+		{
+			"ID": 4,
+			"NOMBRE": "Medellin"
+		}
+	]
+}
+
+

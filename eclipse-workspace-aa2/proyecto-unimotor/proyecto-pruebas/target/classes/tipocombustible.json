@@ -1,0 +1,20 @@
+{
+	"tipocombustible": [
+		{
+			"ID": 1,
+			"NOMBRE": "Gas"
+		},
+		{
+			"ID": 2,
+			"NOMBRE": "Gasolina"
+		},
+		{
+			"ID": 3,
+			"NOMBRE": "Diesel"
+		},
+		{
+			"ID": 4,
+			"NOMBRE": "Turbo"
+		}
+	]
+}

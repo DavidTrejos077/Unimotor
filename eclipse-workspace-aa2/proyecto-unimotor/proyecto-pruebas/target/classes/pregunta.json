@@ -1,0 +1,25 @@
+{
+	"pregunta": [
+		{
+			"ID": 1,
+			"fecha": "2015-10-1 15:00:00",
+			"Textodelapregunta": "Cual es el costo del carro BMW",
+			"id_persona": 1094922231,
+			"id_vehiculo": 3
+		},
+		{
+			"ID": 2,
+			"fecha": "2016-10-1 15:00:00",
+			"Textodelapregunta": "Quiero conocer este vehiculo",
+			"id_persona": 1094934815,
+			"id_vehiculo": 1
+		},
+		{
+			"ID": 3,
+			"fecha": "2017-10-1 15:00:00" ,
+			"Textodelapregunta": "Tienen disponibles carros Hyundai para la venta, similares a este",
+			"id_persona": 40728440,
+			"id_vehiculo": 2
+		}
+	]
+}

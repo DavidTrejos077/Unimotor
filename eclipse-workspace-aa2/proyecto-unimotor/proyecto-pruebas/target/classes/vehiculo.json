@@ -1,0 +1,59 @@
+{
+	"vehiculo": [
+		{
+			"id_vehiculo": 1,
+			"anio": 2020,
+			"cilindraje": 2000,
+			"color": "Amarillo",
+			"descripcion": "Excelente estado del vehiculo",
+			"numeropuertas": 4,
+			"precio": 7500000,
+			"id_ciudad": 1,
+			"id_marca": 1,
+			"id_persona": 1094934815,
+			"id_tipocombustible": 1,
+			"id_tipovehiculo": 1
+		},
+		{
+			"id_vehiculo": 2,
+			"anio": 2021,
+			"cilindraje": 2500,
+			"color": "Negro",
+			"descripcion": "Ya fue reparado del motor",
+			"numeropuertas": 2,
+			"precio": 17500000,
+			"id_ciudad": 2,
+			"id_marca": 2,
+			"id_persona": 1094922231,
+			"id_tipocombustible": 2,
+			"id_tipovehiculo": 3
+		},
+		{
+			"id_vehiculo": 3,
+			"anio": 2019,
+			"cilindraje": 1500,
+			"color": "Morado",
+			"descripcion": "Lo ultimo en tendencia",
+			"numeropuertas": 5,
+			"precio": 12500000,
+			"id_ciudad": 2,
+			"id_marca": 4,
+			"id_persona": 13818457,
+			"id_tipocombustible": 3,
+			"id_tipovehiculo": 4
+		}
+	]
+}	
+	     
+	     
+	   
+	     
+	    
+	   
+		
+		
+	  
+	
+	 
+	  
+	

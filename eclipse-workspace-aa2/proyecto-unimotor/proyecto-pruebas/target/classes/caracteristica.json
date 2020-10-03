@@ -1,0 +1,20 @@
+{
+	"caracteristica": [
+		{
+			"ID": 1,
+			"NOMBRE": "Rines de lujo"
+		},
+		{
+			"ID": 2,
+			"NOMBRE": "Pelicula de seguridad"
+		},
+		{
+			"ID": 3,
+			"NOMBRE": "Vidrios electricos"
+		},
+		{
+			"ID": 4,
+			"NOMBRE": "Sunroof"
+		}
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"tipovehiculo": [
+		{
+			"ID": 1,
+			"NOMBRE": "Carro"
+		},
+		{
+			"ID": 2,
+			"NOMBRE": "Camioneta"
+		},
+		{
+			"ID": 3,
+			"NOMBRE": "Camion"
+		},
+		{
+			"ID": 4,
+			"NOMBRE": "Tractomula"
+		}
+	]
+}

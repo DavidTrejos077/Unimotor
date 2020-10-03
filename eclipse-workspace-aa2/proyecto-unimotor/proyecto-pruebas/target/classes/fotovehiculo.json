@@ -1,0 +1,20 @@
+{
+	"fotovehiculo": [
+		{
+			"ID": 1,
+			"URL": "Foto del carro",
+			"id_vehiculo": 3
+		},
+		{
+			"ID": 2,
+			"URL": "Foto interior del carro",
+			"id_vehiculo": 3
+		},
+		{
+		
+		    "ID": 3,
+			"URL": "Foto motor del carro",
+			"id_vehiculo": 3
+		}
+	]
+}

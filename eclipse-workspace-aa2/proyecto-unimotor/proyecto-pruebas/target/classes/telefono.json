@@ -1,0 +1,28 @@
+{
+	"telefono": [
+		{
+			"ID": 1,
+			"CLAVE": "Rutinatio",
+			"NUMERO": 3187958946,
+			"id_persona": 1094922231
+		},
+		{
+			"ID": 2,
+			"CLAVE": "Prapitzi",
+			"NUMERO": 314728440,
+			"id_persona": 1094934815
+		},
+		{
+			"ID": 3,
+			"CLAVE": "Vera",
+			"NUMERO": 3207679271,
+			"id_persona": 40728440
+		},
+		{
+			"ID": 4,
+			"CLAVE": "Zooofico",
+			"NUMERO": 3154407894,
+			"id_persona": 13818457
+		}
+	]
+}
