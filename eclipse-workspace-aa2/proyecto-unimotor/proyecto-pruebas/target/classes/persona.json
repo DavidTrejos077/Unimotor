@@ -6,9 +6,9 @@
 			"direccion": "Los Quindos Manzana 3",
 			"email": "davidtrejoscortes@gmail.com",
 			"GENERO": "MASCULINO",
-			"nombre": "David Trejos Cortes",
-			
-			"id_ciudad": 1
+			"nombre": "David Trejos Cortes"
+			"id_ciudad": 1,
+			"dtype": "Cliente"
 		},
 		{
 			"cedula": 1094934815,
@@ -17,28 +17,42 @@
 			"email": "marcelamayachavez@gmail.com",
 			"GENERO": "FEMENINO",
 			"nombre": "Viviana Marcela Maya",
-			
-			"id_ciudad": 2
+			"id_ciudad": 2,
+			"dtype": "Vendedor"
 		},
 		{
 			"cedula": 40728440,
 			"clave": "autopsia",
-			"direccion": "Limonar Manzana 7",
-			"email": "Chavez123@hotmail.com",
+			"direccion": "Limonar Manzana 7",			"email": "Chavez123@hotmail.com",
 			"GENERO": "FEMENINO",
 			"nombre": "Margarita Chavez",
-			
-			"id_ciudad": 3
+			"id_ciudad": 3,
+			"dtype": "Cliente"
 		},
 		{
 			"cedula": 13818457,
 			"clave": "necropsia",
-			"direccion": "La Cabana",
-			"email": "atrejosa@hotmail.com",
+			"direccion": "La Cabana",			"email": "atrejosa@hotmail.com",
 			"GENERO": "MASCULINO",
 			"nombre": "Anibal Trejos",
-			
-			"id_ciudad": 3
+			"id_ciudad": 3,
+			"dtype": "Vendedor"
+		}
+	],
+	"Cliente": [
+		{
+			"cedula": 1094922231
+		},
+		{
+			"cedula": 40728440
+		}
+	],
+	"Vendedor": [
+		{
+			"cedula": 1094934815
+		},
+		{
+			"cedula": 13818457
 		}
 	]
 }

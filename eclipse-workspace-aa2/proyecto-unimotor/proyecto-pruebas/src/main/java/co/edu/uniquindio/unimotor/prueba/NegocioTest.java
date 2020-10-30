@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 
 import co.edu.uniquindio.unimotor.dto.ConsultaVehiculoCaracteristicasDTO;
 import co.edu.uniquindio.unimotor.ejb.UnimotorEJB;
+import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Persona;
 import co.edu.uniquindio.unimotor.entidades.Pregunta;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
@@ -57,18 +58,19 @@ public class NegocioTest {
 	@UsingDataSet({"vehiculo.json","fotovehiculo.json","caracteristica.json","marca.json","persona.json","tipocombustible.json","tipovehiculo.json","modelo.json", "ciudad.json","telefono.json","vehiculo_caracteristica.json","favorito.json"})
 	public void testGuardarVehiculoFavorito () {
 
-		Persona p =  entityManager.find(Persona.class, 1094922231);
+		Cliente cliente =  entityManager.find(Cliente.class, 40728440);
+	
 		Vehiculo v = entityManager.find(Vehiculo.class, 3);
-        Assert.assertEquals(p.getFavorito().size(), 1);
+        Assert.assertEquals(cliente.getFavoritos().size(), 0);
 
 
 		try {
-			unimotorEJB.guardarVehiculoComoFavorito(v, p);
+			unimotorEJB.guardarVehiculoComoFavorito(v, cliente);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 
-      Assert.assertEquals(p.getFavorito().size(), 2);
+      Assert.assertEquals(cliente.getFavoritos().size(), 1);
 
 
 
@@ -84,23 +86,23 @@ public class NegocioTest {
 	@UsingDataSet({"vehiculo.json","fotovehiculo.json","caracteristica.json","marca.json","persona.json","tipocombustible.json","tipovehiculo.json","modelo.json", "ciudad.json","telefono.json","vehiculo_caracteristica.json","favorito.json"})
 	public void testEliminarVehiculoFavorito () {
 
-		Persona p =  entityManager.find(Persona.class, 1094922231);
+		Cliente cliente =  entityManager.find(Cliente.class, 1094922231);
 		Vehiculo v = entityManager.find(Vehiculo.class, 2);
 		
 		
-		Assert.assertEquals(1, p.getFavorito().size());
+		Assert.assertEquals(1, cliente.getFavoritos().size());
 		
 	
        try {
     	   
-    	   unimotorEJB.eliminarVehiculoComoFavorito(v, p);
+    	   unimotorEJB.eliminarVehiculoComoFavorito(v, cliente);
 	} catch (NullPointerException e) {//Solo va entrar aquí si sale un error de null pointer exception. Si sale otro tipo de error no va entrar al cash.
 		
 		System.out.println("Eliminaste todos los favoritos de los vehiculos marcados");
 	}
         
         
-        Assert.assertEquals (0,p.getFavorito().size());
+        Assert.assertEquals (0,cliente.getFavoritos().size());
         
        }
 	
@@ -144,5 +146,28 @@ public class NegocioTest {
 		} catch (NullPointerException e) {
 			System.out.println("Este vehiculo ya no cuenta con ninguna pregunta");
 		}
-	}	
+	}
+	
+	/**
+	 * Método para responder una pregunta referente a un vehiculo de una persona.
+	 */
+	
+	@Test
+	@Transactional(value=TransactionMode.ROLLBACK)
+	@UsingDataSet({"vehiculo.json","fotovehiculo.json","caracteristica.json","marca.json","persona.json","tipocombustible.json","tipovehiculo.json","modelo.json", "ciudad.json","telefono.json","vehiculo_caracteristica.json","favorito.json","pregunta.json"})
+	public void testResponderPregunta() {
+		
+		
+		Pregunta pregunta = entityManager.find(Pregunta.class, 3);
+		Assert.assertNull(pregunta.getRespuesta());
+		
+		
+		try {
+			unimotorEJB.responderPregunta(pregunta, "Si tenemos carros disponibles Marca Hyundai desde ano 2018");
+			Assert.assertNotNull(pregunta.getRespuesta());
+		} catch (Exception e) {
+			
+		}
+		
+	}
 }

@@ -15,7 +15,8 @@ import javax.persistence.*;
 
 @NamedQueries ({
 	                                                              //Seleccioneme todas las personas que hicieron una pregunta sobre este carro especifico
-	@NamedQuery (name = "LISTA_PERSONAS_PREGUNTA_VEHICULO",query = "select distinct p.persona from Pregunta p where p.vehiculo.id = :id")
+	@NamedQuery (name = "LISTA_PERSONAS_PREGUNTA_VEHICULO",query = "select distinct p.persona from Pregunta p where p.vehiculo.id = :id"),
+	@NamedQuery(name= "LISTA_PREGUNTAS_POR_CADA_VEHICULO",query = "select p from Pregunta p group by p.vehiculo")
 })
 
 public class Pregunta implements Serializable {
@@ -43,8 +44,7 @@ public class Pregunta implements Serializable {
 	private Vehiculo vehiculo;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_pregunta", nullable=true)
-	private Pregunta respuesta;
+	@JoinColumn(name = "id_pregunta", nullable=true)	private Pregunta respuesta;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -63,10 +63,8 @@ public class Pregunta implements Serializable {
 	 */
 	
 	public Pregunta( String texto_de_la_pregunta, Persona persona, Vehiculo vehiculo) {
-		super();
-	
-		this.texto_de_la_pregunta = texto_de_la_pregunta;
-		this.fecha = new Date();
+		super();	
+		this.texto_de_la_pregunta = texto_de_la_pregunta;		this.fecha = new Date();
 		this.persona = persona;
 		this.vehiculo = vehiculo;
 	}

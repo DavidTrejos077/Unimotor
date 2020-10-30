@@ -7,30 +7,39 @@ import javax.persistence.EntityManager;
 
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
+import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Favorito;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
+import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
 import co.edu.uniquindio.unimotor.entidades.Persona;
 import co.edu.uniquindio.unimotor.entidades.Pregunta;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
+import co.edu.uniquindio.unimotor.entidades.Vendedor;
 import co.edu.uniquindio.unimotor.excepcion.PersonaInexistenteExcepcion;
 import co.edu.uniquindio.unimotor.excepcion.VehiculoInexistenteExcepcion;
 
 @Remote
 public interface UnimotorEJBRemote {
 
-	void registrarPersona (Persona persona) throws Exception;
+	void registrarCliente (Cliente cliente) throws Exception;
 	
-	void modificarPersona (Persona persona) throws PersonaInexistenteExcepcion;
+	void modificarCliente (Cliente cliente) throws PersonaInexistenteExcepcion;
 	
-	void eliminarPersona (Persona persona) throws PersonaInexistenteExcepcion;
+	void eliminarCliente (Cliente cliente) throws PersonaInexistenteExcepcion;
 	
-
+   void registrarVendedor (Vendedor vendedor) throws Exception;
+	
+	void modificarVendedor (Vendedor vendedor) throws PersonaInexistenteExcepcion;
+	
+	void eliminarVendedor (Vendedor vendedor) throws PersonaInexistenteExcepcion;
 		
     Persona iniciarSesion (String email, String clave) throws Exception;
 		
 	void registrarVehiculo (Vehiculo vehiculo)throws Exception;
 	
 	List<Vehiculo> obtenerListaVehiculos();
+	
+	List <Pregunta> obtenerListaPreguntas();
 	
 	List <Persona> obtenerListaPersonas();
 	
@@ -40,9 +49,11 @@ public interface UnimotorEJBRemote {
 	
 	List <Vehiculo> obtenerListaVehiculosPorCiudad(Ciudad ciudad)throws Exception;
 	
-    void guardarVehiculoComoFavorito (Vehiculo vehiculo , Persona persona) throws Exception;
+	void responderPregunta (Pregunta pregunta, String respuesta)throws Exception;
+	
+    void guardarVehiculoComoFavorito (Vehiculo vehiculo , Cliente cliente) throws Exception;
     
-    void eliminarVehiculoComoFavorito (Vehiculo vehiculo , Persona persona) throws NullPointerException;
+    void eliminarVehiculoComoFavorito (Vehiculo vehiculo , Cliente cliente) throws NullPointerException;
     
     void realizarPreguntaVehiculo (Pregunta pregunta) ;
     
@@ -58,7 +69,14 @@ public interface UnimotorEJBRemote {
 	
 	List <Modelo> obtenerListaModelos();
 	
-	void enviarConGMail (String destinatario,String asunto,String cuerpo) throws Exception;
+	
+	
+	List <Vehiculo> buscarVehiculosPorFiltro (OpcionNuevoUsado carroNuevoUsado, int idMarca, long precioMin,long precioMax,int anioInicio,int anioFin) throws Exception;
+		
+		
+	
+		
+	
 	
 	
 	

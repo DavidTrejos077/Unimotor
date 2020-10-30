@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Unimotor</title>
+</h:head>
+<h:body>
+   
+  <header>
+  
+  <h1 align="center">#{holaMundoBean.mensaje1}</h1>
+  <div> icono de la pagina </div>
+  <div> 
+  <h:form>
+  <ul>
+  <li> <h:commandLink action= "registroPersona?faces-redirect=true"
+  value= "Registrar Persona"/></li>
+  <li> <h:commandLink action= "registroVehiculo?faces-redirect=true"
+  value= "Registrar Vehiculo"/></li>
+  <li> <h:commandLink action= "indexRecuperarPassword?faces-redirect=true"
+  value= "Recuperar password"/></li>
+  </ul>
+  </h:form>
+  
+  
+  </div>
+  </header>
+  <section>
+    <div> lista de los vehiculos, los más buscados o populares</div>
+  </section>
+  
+  <footer>
+  
+  <p>  Unimotor-2020 </p>
+  <h:outputLink value="https://www.facebook.com/unimotor.compraventa" >Facebook</h:outputLink>
+  <br/>
+  <h:outputLink value="https://twitter.com/Unimotor2" >Twitter</h:outputLink> 
+   <br/>
+  <h:outputLink value="https://www.instagram.com/c.r.autos/?hl=es-la" >Instagram</h:outputLink>
+  
+  </footer>
+   
+</h:body>
+</html>

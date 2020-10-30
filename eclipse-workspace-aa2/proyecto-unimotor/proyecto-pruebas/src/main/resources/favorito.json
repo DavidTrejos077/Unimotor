@@ -2,18 +2,18 @@
 	"favorito": [
 		{
 			"ID": 1,
-			"id_persona": 1094934815,
+			"id_cliente": 1094934815,
 			"id_vehiculo": 1
 		},
 		{
 			"ID": 2,
-			"id_persona": 1094922231,
+			"id_cliente": 1094922231,
 			"id_vehiculo": 2
 		},
 		
 		{
 			"ID": 3,
-			"id_persona": 13818457,
+			"id_cliente": 13818457,
 			"id_vehiculo": 3
 		}
 	]

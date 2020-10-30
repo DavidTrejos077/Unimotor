@@ -1,29 +1,36 @@
 package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
-import java.lang.String;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 /**
  * Implementación de la clase para la entidad:Persona
  *
  */
 @Entity
-
+@Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries ({
 	
 	@NamedQuery(name = "TODAS_PERSONAS",query = "select count(p) from Persona p"),
 	@NamedQuery(name = "AUTENTICAR_PERSONA",query = "select p from Persona p where p.email = :email and p.clave = :clave"),
-	@NamedQuery(name = "LISTA_FAVORITOS_PERSONA",query = "select f from Persona p,IN (p.favoritos) f where p.email = :email"),
-	@NamedQuery(name = "LISTA_FAVORITOS_PERSONA_JOIN",query = "select f.vehiculo from Persona p join p.favoritos f where p.email = :email"),
-	@NamedQuery(name= "LISTA_PERSONAS_ORDENADAS_ALFABETICAMENTE",query= "select p from Persona p order by p.nombre asc"),
+    @NamedQuery(name= "LISTA_PERSONAS_ORDENADAS_ALFABETICAMENTE",query= "select p from Persona p order by p.nombre asc"),
 	@NamedQuery(name= "LISTA_PERSONAS_USAN_CORREO_HOTMAIL",query= "select p from Persona p where p.email like '%hotmail%'"),
 	@NamedQuery(name= "BUSCAR_PERSONA_POR_CORREO",query= "select p from Persona p where p.email = :email"),
 	@NamedQuery(name= "BUSCAR_PERSONA_TELEFONO",query= "select p from Persona p where p.id = :telefonoFijo"),
@@ -32,20 +39,25 @@ import javax.validation.constraints.Min;
 
 public class Persona implements Serializable {
 
-	   
+	
 	@Id
+	@NotBlank(message = "Please enter id")  
 	@Column(name = "cedula")
 	private int id;
 	
+	@NotBlank (message = "El nombre no puede ser vacio")
 	@Column(name = "nombre", length=100, nullable=false)
 	private String nombre;
 	
+	@NotBlank(message = "El email no puede ser vacio")
 	@Column(name = "email", length=200 , unique = true , nullable=false)
 	private String email;
 	
+	@NotBlank (message = "La clave no puede ser vacio")
 	@Column(name = "clave", length=50, nullable=false)
 	private String clave;
 	
+	@NotBlank 
 	@Column(name = "direccion", length=300, nullable=false)
 	private String direccion;
 	
@@ -54,13 +66,7 @@ public class Persona implements Serializable {
 	@JoinColumn(name = "id_ciudad", nullable=false)
 	private Ciudad ciudad;
 
-	@OneToMany(mappedBy = "persona")
-	private List<Favorito> favoritos;
-	
-	@OneToMany(mappedBy = "persona")
-	private List<Pregunta> preguntas;
-	
-	@OneToMany(mappedBy = "persona")
+    @OneToMany(mappedBy = "persona")
 	private List<Vehiculo> vehiculos;
 	
 	@Enumerated (EnumType.STRING)
@@ -100,8 +106,6 @@ public class Persona implements Serializable {
 		this.clave = clave;
 		this.direccion = direccion;
 		this.ciudad = ciudad;
-		this.favoritos = new ArrayList<Favorito>();
-		this.preguntas = new ArrayList<Pregunta>();
 		this.vehiculos = new ArrayList<Vehiculo>();
 		
 	}
@@ -117,24 +121,9 @@ public class Persona implements Serializable {
 	}
 
 
-	public List<Favorito> getFavorito() {
-		return favoritos;
-	}
+	
 
-
-	public void setFavorito(List<Favorito> favorito) {
-		this.favoritos = favorito;
-	}
-
-
-	public List<Pregunta> getPregunta() {
-		return preguntas;
-	}
-
-
-	public void setPregunta(List<Pregunta> pregunta) {
-		this.preguntas = pregunta;
-	}
+	
 
 
 	public List<Vehiculo> getVehiculo() {

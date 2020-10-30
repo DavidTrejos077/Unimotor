@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Unimotor</title>
+</h:head>
+<h:body>
+   
+   <h:form>
+    <p:outputLabel value="Inscríbete
+    Con esta cuenta podrás entrar a Unimotor para comprar y vender carros." ></p:outputLabel>
+   <h:panelGrid columns="3" cellpadding= "5" style="align:center">
+  
+   <p:outputLabel for= "nombre_publicacion" value="NombrePublicacion:" ></p:outputLabel>
+   <p:inputText id= "nombre_publicacion" value= "#{vehiculoBean.nombrePublicacion}" required="true"> </p:inputText>
+   <p:message for="nombre_publicacion"/>
+   
+   <p:outputLabel for= "precio_vehiculo" value="Precio:" ></p:outputLabel>
+   <p:inputText id= "precio_vehiculo" value= "#{vehiculoBean.precio}" required="true"> </p:inputText>
+   <p:message for="precio_vehiculo"/>
+   
+   <p:outputLabel for= "placa_vehiculo" value="Placa:" ></p:outputLabel>
+   <p:inputText id= "placa_vehiculo" value= "#{vehiculoBean.placa}" required="true"> </p:inputText>
+   <p:message for="placa_vehiculo"/>
+   
+   <p:outputLabel for= "km_vehiculo" value="Kilometraje:" ></p:outputLabel>
+   <p:inputText id= "km_vehiculo" value= "#{vehiculoBean.kilometraje}" required="true"> </p:inputText>
+   <p:message for="km_vehiculo"/>
+   
+   <p:outputLabel for= "descripcion_vehiculo" value="Descripcion:" ></p:outputLabel>
+   <p:inputTextarea rows="10" cols= "50" id="descripcion_vehiculo" value= "#{vehiculoBean.descripcion}" required="true"> </p:inputTextarea>
+   <p:message for="descripcion_vehiculo"/>
+   
+   <p:outputLabel for= "color_vehiculo" value="Color:" ></p:outputLabel>
+   <p:inputText id= "color_vehiculo" value= "#{vehiculoBean.color}" required="true"> </p:inputText>
+   <p:message for="color_vehiculo"/>
+   
+   <p:outputLabel for= "anio_vehiculo"  value="Año:" ></p:outputLabel>
+   <p:inputText id="anio_vehiculo" value= "#{vehiculoBean.anio}" required="true"> </p:inputText>
+   <p:message for="anio_vehiculo"/>
+   
+    <p:outputLabel for= "cilindraje_vehiculo" value="Cilindraje:" ></p:outputLabel>
+   <p:inputText id= "cilindraje_vehiculo" value= "#{vehiculoBean.cilindraje}" required="true"> </p:inputText>
+   <p:message for="cilindraje_vehiculo"/>
+   
+    <p:outputLabel for= "NumeroPuertas_vehiculo"  value="Numero de puertas:" ></p:outputLabel>
+   <p:inputText id="NumeroPuertas_vehiculo" value= "#{vehiculoBean.numeroPuertas}" required="true"> </p:inputText>
+   <p:message for="NumeroPuertas_vehiculo"/>
+   
+    <p:outputLabel value="Tipo de combustible:" ></p:outputLabel>
+    <p:selectOneRadio id="console" value="#{vehiculoBean.tipocombustible}" unselectable="true">
+            <f:selectItem itemLabel="GAS" itemValue="GAS" />
+            <f:selectItem itemLabel="GASOLINA" itemValue="GASOLINA" />
+            <f:selectItem itemLabel="DIESEL" itemValue="DIESEL" />
+           </p:selectOneRadio>
+     <br/>      
+           <p:outputLabel value="Tipo de tranmision:" ></p:outputLabel>
+    <p:selectOneRadio id="console" value="#{vehiculoBean.transmision}" unselectable="true">
+            <f:selectItem itemLabel="MECANICA" itemValue="MECANICA" />
+            <f:selectItem itemLabel="AUTOMATICA" itemValue="AUTOMATICA" />
+           </p:selectOneRadio>
+       <br/>        
+    <p:outputLabel value="Tipo de Vehiculo:" ></p:outputLabel>
+  <p:selectOneRadio id="tipoVehiculo" value="#{vehiculoBean.tipovehiculo}" unselectable="true">
+            <f:selectItem itemLabel="Carro" itemValue="Carro" />
+            <f:selectItem itemLabel="Camioneta" itemValue="Camioneta" />
+            <f:selectItem itemLabel="Camion" itemValue="Camion" />
+            <f:selectItem itemLabel="Carro de coleccion" itemValue="Carro de coleccion" />
+        </p:selectOneRadio>
+        <br/>    
+    <p:outputLabel value="Ciudad:" ></p:outputLabel>
+   <p:inputText value= "#{vehiculoBean.ciudad}"> </p:inputText>
+   <br/>    
+    <p:outputLabel value="Marca:" ></p:outputLabel>
+   <p:inputText value= "#{vehiculoBean.marca}"> </p:inputText>
+   <br/>    
+    <p:outputLabel value="Modelo:" ></p:outputLabel>
+   <p:inputText value= "#{vehiculoBean.modelo}"> </p:inputText>
+   <br/>    
+    <p:outputLabel value="Fotos del Vehiculo:" ></p:outputLabel>
+     <p:fileUpload listener="#{vehiculoBean.handleFileUpload}" mode="advanced" dragDropSupport="false"
+      multiple="true" sizeLimit="1000000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+   <br/>    
+   <p:selectOneRadio id="console" value="#{vehiculoBean.carroNuevoUsado}" unselectable="true">
+            <f:selectItem itemLabel="Nuevo" itemValue="Nuevo" />
+            <f:selectItem itemLabel="Usado" itemValue="Usado" />
+        </p:selectOneRadio>
+          
+       <p:selectManyCheckbox id="basic" value="#{vehiculoBean.caracteristica}">
+        <f:selectItem itemLabel="GPS" itemValue="GPS" />
+        <f:selectItem itemLabel="AIRBAG" itemValue="AIRBAG" />
+        <f:selectItem itemLabel="AIRE ACONDICIONADO" itemValue="AIRE ACONDICIONADO" />
+    </p:selectManyCheckbox>
+    <br/>    
+   </h:panelGrid>
+   <p:commandButton value="Registrar Vehiculo" id="ajax"  action="#{vehiculoBean.registrar}" style="margin-right:20px;" styleClass="ui-priority-primary" update="@form" />
+   <p:messages  id="messages" showDetail= "true"/>
+   </h:form>
+   
+   
+</h:body>
+</html>

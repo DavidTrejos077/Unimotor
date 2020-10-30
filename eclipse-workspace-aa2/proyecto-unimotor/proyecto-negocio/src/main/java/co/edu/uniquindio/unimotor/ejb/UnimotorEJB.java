@@ -18,11 +18,14 @@ import javax.persistence.TypedQuery;
 
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
+import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Favorito;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
+import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
 import co.edu.uniquindio.unimotor.entidades.Persona;
 import co.edu.uniquindio.unimotor.entidades.Pregunta;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
+import co.edu.uniquindio.unimotor.entidades.Vendedor;
 import co.edu.uniquindio.unimotor.excepcion.PersonaInexistenteExcepcion;
 import co.edu.uniquindio.unimotor.excepcion.VehiculoInexistenteExcepcion;
 
@@ -44,55 +47,116 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	}
 
 	/**
-	 * Método para guardar una persona en la base de datos
+	 * Método para registrar un cliente en la base de datos
 	 */
 
 	@Override
-	public void registrarPersona(Persona persona) throws Exception {
+	public void registrarCliente (Cliente cliente) throws Exception {
 
-		if (buscarPersonaPorEmail(persona.getEmail())) {
+		
+		try {
+			
+	System.out.println("Entro a registrar cliente");
+	if (buscarPersonaPorEmail(cliente.getEmail())) {
+
+		throw new Exception("El email ya está registrado en la base de datos");
+	}
+
+	entityManager.persist(cliente);
+} catch (Exception e) {
+	
+}
+		
+
+	}
+
+	/**
+	 * Método para modificar un cliente en la base de datos.
+	 */
+
+	@Override
+	public void modificarCliente(Cliente cliente) throws PersonaInexistenteExcepcion {
+
+		Cliente buscado = entityManager.find(Cliente.class, cliente.getId());
+
+		if (buscado == null) {
+
+			throw new PersonaInexistenteExcepcion("El cliente no esta registrado");
+
+		}
+
+		entityManager.merge(cliente);
+	}
+
+	/**
+	 * Método para eliminar un cliente en la base de datos.
+	 */
+
+	public void eliminarCliente (Cliente cliente) throws PersonaInexistenteExcepcion {
+
+		Persona buscado = entityManager.find(Cliente.class, cliente.getId());
+
+		if (buscado == null) {
+
+			throw new PersonaInexistenteExcepcion("La persona no esta registrada");
+
+		}
+
+		entityManager.remove(cliente);
+	}
+	
+	/**
+	 * Método para registrar un vendedor en la base de datos.
+	 */
+
+	@Override
+	public void registrarVendedor (Vendedor vendedor) throws Exception {
+
+		if (buscarPersonaPorEmail(vendedor.getEmail())) {
 
 			throw new Exception("El email ya está registrado en la base de datos");
 		}
 
-		entityManager.persist(persona);
+		entityManager.persist(vendedor);
 
 	}
-
+	
 	/**
-	 * Método para modificar una persona en la base de datos.
+	 * Método para modificar un vendedor en la base de datos.
 	 */
 
 	@Override
-	public void modificarPersona(Persona persona) throws PersonaInexistenteExcepcion {
+	public void modificarVendedor(Vendedor vendedor) throws PersonaInexistenteExcepcion {
 
-		Persona buscado = entityManager.find(Persona.class, persona.getId());
+		Vendedor buscado = entityManager.find(Vendedor.class, vendedor.getId());
 
 		if (buscado == null) {
 
-			throw new PersonaInexistenteExcepcion("La persona no esta registrada");
+			throw new PersonaInexistenteExcepcion("El vendedor no esta registrado");
 
 		}
 
-		entityManager.merge(persona);
+		entityManager.merge(vendedor);
 	}
-
+	
+	
 	/**
-	 * Método para eliminar una persona en la base de datos.
+	 * Método para eliminar un vendedor en la base de datos.
 	 */
 
-	public void eliminarPersona(Persona persona) throws PersonaInexistenteExcepcion {
+	public void eliminarVendedor (Vendedor vendedor) throws PersonaInexistenteExcepcion {
 
-		Persona buscado = entityManager.find(Persona.class, persona.getId());
+		Vendedor  buscado = entityManager.find(Vendedor.class, vendedor.getId());
 
 		if (buscado == null) {
 
-			throw new PersonaInexistenteExcepcion("La persona no esta registrada");
+			throw new PersonaInexistenteExcepcion("la persona no esta registrada");
 
 		}
 
-		entityManager.remove(persona);
+		entityManager.remove(vendedor);
 	}
+
 
 	/**
 	 * Método para buscar una persona existente en la base de datos de acuerdo a un
@@ -146,8 +210,8 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	}
 
 	/**
-	 * Método para buscar una persona existente en la base de datos de acuerdo a un
-	 * email dado
+	 * Método para registrar un vehiculo de acuerdo a una placa dada
+	 * 
 	 */
 	@Override
 	public void registrarVehiculo(Vehiculo vehiculo) throws Exception {
@@ -286,67 +350,28 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		return l;
 	}
 
-	/**
-	 * Método para enviar un correo mediante GMAIL
-	 */
+	
 
-	public void enviarConGMail(String destinatario, String asunto, String cuerpo) {
-		// Esto es lo que va delante de @gmail.com en tu cuenta de correo. Es el
-		// remitente también.
-		String remitente = "davidtrejoscortes"; // Para la dirección nomcuenta@gmail.com
-		String clave = "marcaselausadi";
+	
 
-		Properties props = System.getProperties();
-		props.put("mail.smtp.host", "smtp.gmail.com"); // El servidor SMTP de Google
-		props.put("mail.smtp.user", remitente);
-		props.put("mail.smtp.clave", "miClaveDeGMail"); // La clave de la cuenta
-		props.put("mail.smtp.auth", "true"); // Usar autenticación mediante usuario y clave
-		props.put("mail.smtp.starttls.enable", "true"); // Para conectar de manera segura al servidor SMTP
-		props.put("mail.smtp.port", "587"); // El puerto SMTP seguro de Google
-
-		Session session = Session.getDefaultInstance(props);
-		MimeMessage message = new MimeMessage(session);
-
-		try {
-			message.setFrom(new InternetAddress(remitente));
-			message.addRecipients(Message.RecipientType.TO, destinatario); // Se podrían añadir varios de la misma
-			// manera
-			message.setSubject(asunto);
-			message.setText(cuerpo);
-			Transport transport = session.getTransport("smtp");
-
-			transport.connect("smtp.gmail.com", remitente, clave);
-			transport.sendMessage(message, message.getAllRecipients());
-			transport.close();
-		} catch (MessagingException me) {
-			me.printStackTrace(); // Si se produce un error
-		}
-	}
-
-	public void main(String[] args) {
-		String destinatario = "juanstc@gmail.com"; // A quien le quieres escribir.
-		String asunto = "Correo de prueba enviado desde Java";
-		String cuerpo = "Esta es una prueba de correo...";
-
-		enviarConGMail(destinatario, asunto, cuerpo);
-	}
+		
 
 	/**
 	 * Método para guardar un Vehiculo como favorito.
 	 */
 	@Override
-	public void guardarVehiculoComoFavorito(Vehiculo vehiculo, Persona persona) throws Exception {
+	public void guardarVehiculoComoFavorito(Vehiculo vehiculo, Cliente cliente) throws Exception {
 
 		TypedQuery<Favorito> q = entityManager.createNamedQuery("LISTA_FAVORITOS_PERSONA", Favorito.class);
-		q.setParameter("email", persona.getEmail());
+		System.out.println(cliente.getNombre());
+		q.setParameter("email", cliente.getEmail());
 
 		List<Favorito> l = q.getResultList();
 
-		Favorito f = new Favorito(persona, vehiculo);
+		Favorito f = new Favorito(cliente, vehiculo);
 
 		for (Favorito favorito : l) {
-			System.out.println(favorito.getVehiculo().getId());
-			System.out.println(vehiculo.getId());
+			
 			if (favorito.getVehiculo().getPlaca() == (vehiculo.getPlaca())) {
 				throw new Exception("Este Vehiculo ya hace parte de tu lista de favoritos");
 			}
@@ -354,19 +379,19 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 		l.add(f);
 
-		persona.setFavorito(l);
+		cliente.setFavoritos(l);
 
-		entityManager.merge(persona);
+		entityManager.merge(cliente);
 	}
 
 	/**
 	 * Método para eliminar un Vehiculo como favorito.
 	 */
 	@Override
-	public void eliminarVehiculoComoFavorito(Vehiculo vehiculo, Persona persona) throws NullPointerException {
+	public void eliminarVehiculoComoFavorito(Vehiculo vehiculo, Cliente cliente) throws NullPointerException {
 
 		TypedQuery<Favorito> q = entityManager.createNamedQuery("LISTA_FAVORITOS_PERSONA", Favorito.class);
-		q.setParameter("email", persona.getEmail());
+		q.setParameter("email", cliente.getEmail());
 
 		List<Favorito> l = q.getResultList();
 
@@ -378,9 +403,9 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 			}
 		}
 
-		persona.setFavorito(l);
+		cliente.setFavoritos(l);
 
-		entityManager.merge(persona);
+		entityManager.merge(cliente);
 
 	}
 
@@ -419,6 +444,99 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		entityManager.merge(pregunta.getVehiculo());
 
 	 }
+    /**
+     * Método para obtener la lista de preguntas de cualquier vehiculo.
+     */
+	@Override
+	public List<Pregunta> obtenerListaPreguntas() {
+		
+		TypedQuery<Pregunta> q = entityManager.createNamedQuery("LISTA_PREGUNTAS_POR_CADA_VEHICULO", Pregunta.class);
+		List<Pregunta> l = q.getResultList();
+
+		
+		
+		for (Pregunta p : l) {
+			System.out.println(p);
+		}
+		
+		
+		return l;
+
+	
+	}
+
+	@Override
+	public List<Vehiculo> buscarVehiculosPorFiltro(OpcionNuevoUsado carroNuevoUsado, int idMarca, long precioMin,long precioMax, int anioInicio, int anioFin) throws Exception {
+		
+	String consulta = "select v from Vehiculo v ";
+	String filtros = "";
+	
+	
+	
+	if(carroNuevoUsado != null) {
+		
+		if (filtros.equals("")) {
+			filtros = "where v.carroNuevoUsado = :tipo ";
+		}else {
+			filtros+= "and v.carroNuevoUsado = :tipo ";
+		}
+	}
+	
+   if(idMarca == 0) {
+		
+		if (filtros.equals("")) {
+			filtros = "where v.marca.id = :id ";
+		}else {
+			filtros+= "and v.marca.id = :id ";
+		}
+	}
+	
+	
+   if(precioMin > 0 && precioMax >0) {
+		
+		if (filtros.equals("")) {
+			filtros = "where v.precio between :precioMin and :precioMax ";
+		}else {
+			filtros+= "and v.precio between :precioMin and :precioMax ";
+		}
+	}
+   
+   if(anioInicio > 0 && anioFin >0) {
+		
+		if (filtros.equals("")) {
+			filtros = "where v.anio between :anioInicio and :anioFin ";
+		}else {
+			filtros+= "and v.anio between :anioInicio and :anioFin ";
+		}
+	}
+  
+   consulta +=  filtros;
+   
+	TypedQuery<Vehiculo> q = entityManager.createNamedQuery(consulta, Vehiculo.class);
+	List<Vehiculo> l = q.getResultList();
+   
+	return l;
+	
+	
+	
+	}
+
+	@Override
+	public void responderPregunta(Pregunta pregunta, String respuesta) throws Exception {
+		
+		Pregunta preguntaNueva = new Pregunta(respuesta, pregunta.getPersona(), pregunta.getVehiculo());
+		
+		pregunta.setRespuesta(preguntaNueva);
+		
+		entityManager.merge(pregunta);
+		
+	}
+
+	
+	
+
+	
+	
 		
 	}
 

@@ -1,13 +1,24 @@
 package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 /**
  * Clase que implementa la entidad:Vehiculo
@@ -50,35 +61,50 @@ public class Vehiculo implements Serializable {
 	@Column(name = "id_vehiculo", length=12)
 	private int id;
 	
-	@Column(name = "precio", nullable=false)
-	private long precio;
+	@NotBlank(message = "Nombre de publicacion no puede ser vacio")  
+	@Column(name = "nombrePublicacion", length=100)
+	private String nombrePublicacion;
+	
+	@Positive
+	@NotBlank(message = "El precio no puede ser vacio")  
+	@Column(name = "precio", nullable=false)	private long precio;
+	
 	
 	@Column(name = "placa", nullable=false, unique=true)
 	private String placa;
 	
+	@Positive 
 	@Column (name = "kilometraje", nullable=false)
 	private long kilometraje;
 	
+	@NotBlank(message = "La descripcion no puede ser vacia")  
 	@Column(name = "descripcion", length=200, nullable=false)
 	private String descripcion;
 	
+	@NotBlank(message = "El color no puede ser vacio")  
 	@Column(name = "color", length=25, nullable=false)
 	private String color;
 	
+	@Positive 
 	@Column(name = "anio", nullable=false)
 	private int anio;
 	
+	 
 	@Column(name = "cilindraje", nullable=false)
 	private int cilindraje;
 	
 	@Max(5)
 	@Min(1)
+	@Positive
 	@Column(name = "numeropuertas", nullable=false)
 	private Integer numeroPuertas;
 	private static final long serialVersionUID = 1L;
 	
 	@Enumerated (EnumType.STRING)
 	private TipoCombustibleEnum tipocombustible;
+	
+	@Enumerated (EnumType.STRING)
+	private Tranmision transmision;
 	
 	
 	@Enumerated (EnumType.STRING)
@@ -116,18 +142,15 @@ public class Vehiculo implements Serializable {
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
-	@JoinColumn(nullable=true)
-	private List<Favorito> favoritos;
+	@JoinColumn(nullable=true)	private List<Favorito> favoritos;
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
-	@JoinColumn(nullable=true)
-	private List<Pregunta> preguntas;
+	@JoinColumn(nullable=true)	private List<Pregunta> preguntas;
 	
 	
 	
-	@OneToMany(mappedBy = "vehiculo")
-	@JoinColumn(nullable=false)
+	@OneToMany(mappedBy = "vehiculo")	@JoinColumn(nullable=false)
 	private List<Fotovehiculo> fotoVehiculos;
 	
 	@ManyToMany 
@@ -163,7 +186,7 @@ public class Vehiculo implements Serializable {
 	 *
 	 */
 
-	
+		
 	
 	public int getId() {
 		return this.id;
@@ -188,13 +211,14 @@ public class Vehiculo implements Serializable {
 
 
 
-	public Vehiculo(int id, long precio,String placa, long kilometraje, String descripcion, String color, int anio, int cilindraje,
-			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible,
+	public Vehiculo(int id, String nombrePublicacion, long precio,String placa, long kilometraje, String descripcion, String color, int anio, int cilindraje,
+			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible, Tranmision tranmision,
 			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Persona persona, Ciudad ciudad,
 			Marca marca, Modelo modelo, 
 			List<Fotovehiculo> fotoVehiculo, List<Caracteristica> caracteristica) {
 		super();
 		this.id = id;
+		this.nombrePublicacion=nombrePublicacion;
 		this.precio = precio;
 		this.placa=placa;
 		this.kilometraje = kilometraje;
@@ -204,18 +228,18 @@ public class Vehiculo implements Serializable {
 		this.cilindraje = cilindraje;
 		this.numeroPuertas = numeroPuertas;
 		this.tipocombustible = tipocombustible;
+		this.transmision = this.transmision;
 		this.carroNuevoUsado = carroNuevoUsado;
 		this.tipovehiculo = tipovehiculo;
 		this.persona = persona;
 		this.ciudad = ciudad;
-		this.marca = marca;
-		this.modelo = modelo;
+		this.marca = marca;		this.modelo = modelo;
 		this.favoritos= new ArrayList<>();
 		this.preguntas = new ArrayList<>();
 		this.fotoVehiculos = fotoVehiculo;
 		this.caracteristica = caracteristica;
 	}
-
+	
 
 
 
@@ -266,6 +290,32 @@ public class Vehiculo implements Serializable {
 
 	public void setTipocombustible(TipoCombustibleEnum tipocombustible) {
 		this.tipocombustible = tipocombustible;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Tranmision getTransmision() {
+		return transmision;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setTransmision(Tranmision transmision) {
+		this.transmision = transmision;
 	}
 
 
@@ -550,13 +600,38 @@ public class Vehiculo implements Serializable {
 
 
 
+	public String getNombrePublicacion() {
+		return nombrePublicacion;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setNombrePublicacion(String nombrePublicacion) {
+		this.nombrePublicacion = nombrePublicacion;
+	}
+
+
+
+
+
+
+
+
+
+
 	public void setId(int id) {
 		this.id = id;
 	}   
 	public float getPrecio() {
 		return this.precio;
 	}
-
 	public void setPrecio(long precio) {
 		this.precio = precio;
 	}   

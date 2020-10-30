@@ -27,11 +27,13 @@ import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
 import co.edu.uniquindio.unimotor.entidades.Tipocombustible;
 import co.edu.uniquindio.unimotor.entidades.Tipovehiculo;
 import co.edu.uniquindio.unimotor.entidades.TipovehiculoEnum;
+import co.edu.uniquindio.unimotor.entidades.Tranmision;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
 import co.edu.uniquindio.unimotor.dto.ConsultaVehiculoCaracteristicasDTO;
 import co.edu.uniquindio.unimotor.dto.ConsultaVehiculosPorCadaMarcaDTO;
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
+import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Favorito;
 import co.edu.uniquindio.unimotor.entidades.Fotovehiculo;
 import co.edu.uniquindio.unimotor.entidades.Genero;
@@ -63,13 +65,11 @@ public class Modelotest {
 
 	}
 	
-
 	//-------------------------------- JUNIT ENTIDAD CIUDAD ---------------------------------//
 
 	/**
 	 * Método para persistir una ciudad en la base de datos.
-	 */
-	
+	 */	
 	@Test
 	@Transactional(value=TransactionMode.ROLLBACK)
 	@UsingDataSet({"ciudad.json"})
@@ -90,7 +90,6 @@ public class Modelotest {
 	@Transactional(value=TransactionMode.ROLLBACK)
 	@UsingDataSet({"ciudad.json"})
 	public void buscarCiudad(){
-
 		Ciudad c = entityManager.find(Ciudad.class, 4);
 		Assert.assertNotNull(c);
 	}
@@ -545,9 +544,7 @@ public class Modelotest {
 	@Test
 	@Transactional(value=TransactionMode.ROLLBACK)
 	@UsingDataSet({"persona.json","ciudad.json","marca.json","tipovehiculo.json","tipocombustible.json","favorito.json","caracteristica.json","fotovehiculo.json","pregunta.json"})
-	public void registraVehiculo(){
-		Ciudad c = new Ciudad(5, "Bogota");
-		Persona p = new Persona(); //deben corregir esto, de acuerdo a la ifno que recibe el constructor
+	public void registraVehiculo(){		Ciudad c = new Ciudad(5, "Bogota");		Persona p = new Persona(); //deben corregir esto, de acuerdo a la ifno que recibe el constructor
 		
 		Marca marca1 = new Marca(5, "Ferrari");
 		Modelo m = new Modelo(5, "CAPTUR");
@@ -568,8 +565,9 @@ public class Modelotest {
 
 
 
+
      
-		Vehiculo v = new Vehiculo(4, 70000000,"WNG750" ,50000,"Excelente estado", "Negro", 2000, 2500, 5, TipoCombustibleEnum.DIESEL  ,  OpcionNuevoUsado.NUEVO, TipovehiculoEnum.CAMIONETA,  p, c ,marca1,m, fotosVehiculos  ,caracteristicas );
+		Vehiculo v = new Vehiculo(4,"Kia sportage revolution xt25" ,70000000,"WNG750" ,50000,"Excelente estado", "Negro", 2000, 2500, 5, TipoCombustibleEnum.DIESEL  , Tranmision.MECANICA,  OpcionNuevoUsado.NUEVO, TipovehiculoEnum.CAMIONETA,  p, c ,marca1,m, fotosVehiculos  ,caracteristicas );
 		
 		entityManager.persist(v);
 
@@ -589,8 +587,7 @@ public class Modelotest {
 
 		Vehiculo v = entityManager.find(Vehiculo.class, 2);
 
-		Assert.assertNotNull(v);
-		System.out.print(v); 
+		Assert.assertNotNull(v);		System.out.print(v); 
 	}
 
 	/**
@@ -602,8 +599,7 @@ public class Modelotest {
 	@UsingDataSet({"persona.json","ciudad.json","marca.json","tipovehiculo.json","tipocombustible.json","vehiculo.json"})
 	public void actualizarVehiculo () {
 
-		Vehiculo v = entityManager.find(Vehiculo.class, 2);
-         
+		Vehiculo v = entityManager.find(Vehiculo.class, 2);         
 		v.setAnio(2003);
 		entityManager.merge(v);
 
@@ -639,7 +635,6 @@ public class Modelotest {
 	@Transactional(value=TransactionMode.ROLLBACK)
 	@UsingDataSet({"persona.json","vehiculo.json"})
 	public void registrarPregunta(){
-
 
 		Pregunta p = new Pregunta( "Quien es el propietario de la nave", null,null);
 		entityManager.persist(p);
@@ -707,9 +702,10 @@ public class Modelotest {
 	@UsingDataSet({"persona.json","vehiculo.json"})
 	public void registrarFavorito(){
 
-        Persona p = new  Persona();
+
+        Cliente cliente = new  Cliente();
         Vehiculo v = new Vehiculo ();
-		Favorito f = new Favorito(p, v);
+		Favorito f = new Favorito(cliente, v);
 		entityManager.persist(f);
 
 		Favorito fbuscado = entityManager.find(Favorito.class, 4);
@@ -828,8 +824,7 @@ public class Modelotest {
 		entityManager.remove(f);
 
 		Fotovehiculo fbuscado = entityManager.find(Fotovehiculo.class, 3);
-		Assert.assertNull(fbuscado);
-	}
+		Assert.assertNull(fbuscado);	}
 	
 	//-------------------------------- CONSULTAS DE LA ENTIDAD VEHICULO ---------------------------------//
 	
@@ -1175,7 +1170,7 @@ ArrayList <String> lista = new  ArrayList <String>();
 	
 	@Test
 	@Transactional(value=TransactionMode.ROLLBACK)
-	@UsingDataSet({"vehiculo.json","fotovehiculo.json","caracteristica.json","marca.json","persona.json","tipocombustible.json","tipovehiculo.json","modelo.json", "ciudad.json","telefono.json","vehiculo_caracteristica.json"})
+	@UsingDataSet({"vehiculo.json","fotovehiclo.json","caracteristica.json","marca.json","persona.json","tipocombustible.json","tipovehiculo.json","modelo.json", "ciudad.json","telefono.json","vehiculo_caracteristica.json"})
 	public void testNumeroVehiculosUnicaCaracteristica () {
 		
 		
