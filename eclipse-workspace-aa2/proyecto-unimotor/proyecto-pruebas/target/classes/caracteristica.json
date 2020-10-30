@@ -2,19 +2,26 @@
 	"caracteristica": [
 		{
 			"ID": 1,
-			"NOMBRE": "Rines de lujo"
+			"NOMBRE":"Rines de lujo"
 		},
 		{
 			"ID": 2,
-			"NOMBRE": "Pelicula de seguridad"
+			"NOMBRE":"Pelicula de seguridad"
 		},
+		
+		
 		{
 			"ID": 3,
-			"NOMBRE": "Vidrios electricos"
+			"NOMBRE":"Vidrios electricos"
 		},
 		{
 			"ID": 4,
-			"NOMBRE": "Sunroof"
+			"NOMBRE":"Sunroof"
+		},
+		
+		{
+			"ID": 5,
+			"NOMBRE":"Polarizado"
 		}
 	]
 }

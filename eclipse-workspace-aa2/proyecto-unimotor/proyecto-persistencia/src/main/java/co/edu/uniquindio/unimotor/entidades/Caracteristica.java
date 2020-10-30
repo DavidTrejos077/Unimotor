@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.List;
 
+import javax.enterprise.inject.Typed;
 import javax.persistence.*;
 
 /**
@@ -11,6 +12,13 @@ import javax.persistence.*;
  *
  */
 @Entity
+
+@NamedQueries ({
+	
+	@NamedQuery (name="LISTA_CARACTERISTICAS",query = "select c from Caracteristica c")
+	
+	
+})
 
 public class Caracteristica implements Serializable {
 

@@ -8,6 +8,10 @@ import javax.persistence.*;
  *
  */
 @Entity
+@NamedQueries ({
+	
+	@NamedQuery(name = "LISTA__PERSONA_FAVORITOS",query = "select f.vehiculo from Favorito f where f.persona.email = :email")
+})
 
 public class Favorito implements Serializable {
 
@@ -43,17 +47,36 @@ public class Favorito implements Serializable {
 	 *
 	 */
 	
-	public Favorito(int id) {
+	public Favorito(Persona persona, Vehiculo vehiculo) {
 		super();
-		this.id = id;
+		this.persona = persona;
+		this.vehiculo = vehiculo;
 	}
 
+	
 
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+
+	public Vehiculo getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(Vehiculo vehiculo) {
+		this.vehiculo = vehiculo;
+	}
 
 	public int getId() {
 		return this.id;
 	}
 
+	
 	public void setId(int id) {
 		this.id = id;
 	}

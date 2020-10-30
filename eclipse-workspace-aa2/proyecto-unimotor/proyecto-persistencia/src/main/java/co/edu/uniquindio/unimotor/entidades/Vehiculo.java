@@ -2,6 +2,7 @@ package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
 import java.lang.String;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -13,6 +14,35 @@ import javax.validation.constraints.Min;
  *
  */
 @Entity 
+@NamedQueries ({ @NamedQuery(name = "TODOS_VEHICULOS", query = "select v from Vehiculo v"),
+@NamedQuery(name = "TODOS_VEHICULOS_CIUDAD",query = "select v from Vehiculo v where v.ciudad = ?1"),
+
+                                                  //Solicitado      //Contexto                     //Condicion
+@NamedQuery(name = "TODOS_VEHICULOS_ANIO",query = "select v from Vehiculo v where v.anio between 1960 and 2019"),
+@NamedQuery(name = "VEHICULO_DESCRIPCION",query = "select v.descripcion from Vehiculo v where v.color = :color"),
+@NamedQuery(name = "VEHICULO_COLOR",query = "select v.descripcion , v.cilindraje, v.precio from Vehiculo v where v.color = :color"),
+@NamedQuery(name = "VEHICULO_PREGUNTAS",query = "select v, p.texto_de_la_pregunta from Vehiculo v left join v.preguntas p"),
+@NamedQuery(name = "LISTA_VEHICULO_CARACTERISTICAS",query = " select c  from Vehiculo v join v.caracteristica c where v.id = :id"),
+@NamedQuery(name="VEHICULO_FOTOS",query = "select v, f from Vehiculo v join v.fotoVehiculos f where v.modelo.marca.nombre = :marca and v.precio between :precioMin and :precioMax"),
+@NamedQuery(name="VEHICULO_CARACTERISTICAS",query = "select  new co.edu.uniquindio.unimotor.dto.ConsultaVehiculoCaracteristicasDTO (v) from Vehiculo v join v.caracteristica c where c.nombre IN :lista"),
+@NamedQuery (name="NUMERO_DE_VEHICULOS_CON_UNA_CARACTERISTICA_ESPECIFICA",query = "select COUNT(v) from Vehiculo v join v.caracteristica c where c.id = :id"),
+@NamedQuery (name="NUMERO_DE_VEHICULOS_POR_CADA_MARCA",query ="select  new co.edu.uniquindio.unimotor.dto.ConsultaVehiculosPorCadaMarcaDTO (v.id,v.marca.nombre,count(v)) from Vehiculo v group by v.marca"),
+@NamedQuery (name="LISTA_VEHICULOS_SIN_PREGUNTA",query = "select v from Vehiculo v where v.preguntas is empty"),
+@NamedQuery (name="NUMERO_DE_VEHICULOS_POR_TIPO",query ="select  v.id,v.marca,count(v) from Vehiculo v group by v.tipoVehiculo"),
+@NamedQuery (name = "VALOR_PROMEDIO_DE_VEHICULOS",query = "select avg(v.precio) from Vehiculo v  where v.marca.id = :marca and v.carroNuevoUsado IN :tipoCarro or v.carroNuevoUsado IN :tipoCarro2 and v.kilometraje between :precioMin and :precioMax and v.ciudad.id = :ciudad"),
+@NamedQuery (name = "LISTA_VEHICULOS_CON_TODAS_LAS_CARACTERISTICAS",query = "select v.id,v.persona, v.descripcion  from Vehiculo v join v.caracteristica c group by v having count (c) >4"),
+@NamedQuery (name = "VEHICULO_NUEVO_MAS_COSTOSO",query = "select max (v.descripcion), v from Vehiculo v where v.carroNuevoUsado = :tipoCarro and  v.ciudad.id = :ciudad"),
+@NamedQuery (name = "VEHICULO_MAS_COSTOSO_POR_CADA_MARCA",query = "select max (v.precio) from Vehiculo v group by v.marca"),
+@NamedQuery (name = "KILOMETROS_RECORRIDOS_POR_MODELO",query = "select sum (v.kilometraje) from Vehiculo v group by v.modelo"),
+@NamedQuery (name = "CANTIDAD_VEHICULOS_POR_MODELO",query = "select count (v) from Vehiculo v group by v.modelo order by v.marca.nombre asc"),
+@NamedQuery (name = "CARACTERISTICA_COMUN_VEHICULOS",query = "select max (c.nombre) from Vehiculo v join v.caracteristica c"),
+@NamedQuery (name = "BUSCAR_VEHICULO_POR_PLACA",query = "select v from Vehiculo v where v.placa = :placa"),
+@NamedQuery(name = "LISTA_VEHICULOS",query = "select v from Vehiculo v"),
+@NamedQuery(name= "VEHICULOS_POR_CIUDAD",query = " select v from Vehiculo v where v.ciudad = :ciudad"),
+@NamedQuery(name = "LISTA_PREGUNTAS_POR_PLACA",query = "select p from Vehiculo v,IN (v.preguntas) p where v.placa = :placa"),
+
+
+})
 public class Vehiculo implements Serializable {
 
 	   
@@ -21,7 +51,13 @@ public class Vehiculo implements Serializable {
 	private int id;
 	
 	@Column(name = "precio", nullable=false)
-	private float precio;
+	private long precio;
+	
+	@Column(name = "placa", nullable=false, unique=true)
+	private String placa;
+	
+	@Column (name = "kilometraje", nullable=false)
+	private long kilometraje;
 	
 	@Column(name = "descripcion", length=200, nullable=false)
 	private String descripcion;
@@ -44,6 +80,9 @@ public class Vehiculo implements Serializable {
 	@Enumerated (EnumType.STRING)
 	private TipoCombustibleEnum tipocombustible;
 	
+	
+	@Enumerated (EnumType.STRING)
+	private OpcionNuevoUsado carroNuevoUsado;
 
 	@Enumerated (EnumType.STRING)
 	private TipovehiculoEnum tipovehiculo;
@@ -60,6 +99,8 @@ public class Vehiculo implements Serializable {
 	@JoinColumn(name = "id_marca", nullable=false)
 	private Marca marca;
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "id_tipovehiculo", nullable=false)
 	private Tipovehiculo tipoVehiculo;
@@ -69,20 +110,25 @@ public class Vehiculo implements Serializable {
 	@JoinColumn(name = "id_tipocombustible", nullable=false)
 	private Tipocombustible tipoCombustible;
 	
+	@ManyToOne
+	@JoinColumn(name = "id_modelo", nullable=false)
+	private Modelo modelo;
+	
 	
 	@OneToMany(mappedBy = "vehiculo")
 	@JoinColumn(nullable=true)
-	private List<Favorito> favorito;
+	private List<Favorito> favoritos;
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
 	@JoinColumn(nullable=true)
-	private List<Pregunta> pregunta;
+	private List<Pregunta> preguntas;
 	
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
-	private List<Fotovehiculo> fotoVehiculo;
+	@JoinColumn(nullable=false)
+	private List<Fotovehiculo> fotoVehiculos;
 	
 	@ManyToMany 
 	private List <Caracteristica> caracteristica;
@@ -117,32 +163,391 @@ public class Vehiculo implements Serializable {
 	 *
 	 */
 
-	public Vehiculo(int id, float precio, String descripcion, String color, int anio, int cilindraje,
-			Integer numeroPuertas, TipoCombustibleEnum tipocombustible, TipovehiculoEnum tipovehiculo,
-			Persona persona, Ciudad ciudad, Marca marca, List<Favorito> favorito, List<Pregunta> pregunta,
+	
+	
+	public int getId() {
+		return this.id;
+	}
+
+
+	
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+	public Vehiculo(int id, long precio,String placa, long kilometraje, String descripcion, String color, int anio, int cilindraje,
+			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible,
+			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Persona persona, Ciudad ciudad,
+			Marca marca, Modelo modelo, 
 			List<Fotovehiculo> fotoVehiculo, List<Caracteristica> caracteristica) {
 		super();
 		this.id = id;
 		this.precio = precio;
+		this.placa=placa;
+		this.kilometraje = kilometraje;
 		this.descripcion = descripcion;
 		this.color = color;
 		this.anio = anio;
 		this.cilindraje = cilindraje;
 		this.numeroPuertas = numeroPuertas;
 		this.tipocombustible = tipocombustible;
+		this.carroNuevoUsado = carroNuevoUsado;
 		this.tipovehiculo = tipovehiculo;
 		this.persona = persona;
 		this.ciudad = ciudad;
 		this.marca = marca;
-		this.favorito = favorito;
-		this.pregunta = pregunta;
-		this.fotoVehiculo = fotoVehiculo;
+		this.modelo = modelo;
+		this.favoritos= new ArrayList<>();
+		this.preguntas = new ArrayList<>();
+		this.fotoVehiculos = fotoVehiculo;
 		this.caracteristica = caracteristica;
 	}
-	
-	public int getId() {
-		return this.id;
+
+
+
+
+
+
+
+
+
+
+	public Integer getNumeroPuertas() {
+		return numeroPuertas;
 	}
+
+
+
+
+
+
+
+
+
+
+	public void setNumeroPuertas(Integer numeroPuertas) {
+		this.numeroPuertas = numeroPuertas;
+	}
+
+
+
+
+
+
+
+
+
+
+	public TipoCombustibleEnum getTipocombustible() {
+		return tipocombustible;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setTipocombustible(TipoCombustibleEnum tipocombustible) {
+		this.tipocombustible = tipocombustible;
+	}
+
+
+
+
+
+
+
+
+
+
+	public TipovehiculoEnum getTipovehiculo() {
+		return tipovehiculo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setTipovehiculo(TipovehiculoEnum tipovehiculo) {
+		this.tipovehiculo = tipovehiculo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Ciudad getCiudad() {
+		return ciudad;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setCiudad(Ciudad ciudad) {
+		this.ciudad = ciudad;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Tipovehiculo getTipoVehiculo() {
+		return tipoVehiculo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setTipoVehiculo(Tipovehiculo tipoVehiculo) {
+		this.tipoVehiculo = tipoVehiculo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Tipocombustible getTipoCombustible() {
+		return tipoCombustible;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setTipoCombustible(Tipocombustible tipoCombustible) {
+		this.tipoCombustible = tipoCombustible;
+	}
+
+
+
+
+
+
+
+
+
+
+	public Modelo getModelo() {
+		return modelo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setModelo(Modelo modelo) {
+		this.modelo = modelo;
+	}
+
+
+
+
+
+
+
+
+
+
+	public List<Favorito> getFavoritos() {
+		return favoritos;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setFavoritos(List<Favorito> favoritos) {
+		this.favoritos = favoritos;
+	}
+
+
+
+
+
+
+
+
+
+
+	public List<Pregunta> getPreguntas() {
+		return preguntas;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setPreguntas(List<Pregunta> preguntas) {
+		this.preguntas = preguntas;
+	}
+
+
+
+
+
+
+
+
+
+
+	public List<Fotovehiculo> getFotoVehiculos() {
+		return fotoVehiculos;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setFotoVehiculos(List<Fotovehiculo> fotoVehiculos) {
+		this.fotoVehiculos = fotoVehiculos;
+	}
+
+
+
+
+
+
+
+
+
+
+	public List<Caracteristica> getCaracteristica() {
+		return caracteristica;
+	}
+
+
+
+
+
+
+
+
+
+
+	public void setCaracteristica(List<Caracteristica> caracteristica) {
+		this.caracteristica = caracteristica;
+	}
+
+
+
+
+
+
+
+
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+
+
+
+
+
+
 
 
 	public void setId(int id) {
@@ -152,7 +557,7 @@ public class Vehiculo implements Serializable {
 		return this.precio;
 	}
 
-	public void setPrecio(float precio) {
+	public void setPrecio(long precio) {
 		this.precio = precio;
 	}   
 	public String getDescripcion() {
@@ -191,9 +596,97 @@ public class Vehiculo implements Serializable {
 		this.numeroPuertas = numeropuertas;
 	}
 	
+	public Marca getMarca() {
+		return marca;
+	}
+
+
+   public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
+
+
 	
 
 	
+
+	public long getKilometraje() {
+	return kilometraje;
+}
+
+
+
+
+
+
+
+
+
+
+public void setKilometraje(long kilometraje) {
+	this.kilometraje = kilometraje;
+}
+
+
+
+
+
+
+
+
+
+
+public String getPlaca() {
+	return placa;
+}
+
+
+
+
+
+
+
+
+
+
+public void setPlaca(String placa) {
+	this.placa = placa;
+}
+
+
+
+
+
+
+
+
+
+
+public OpcionNuevoUsado getCarroNuevoUsado() {
+	return carroNuevoUsado;
+}
+
+
+
+
+
+
+
+
+
+
+public void setCarroNuevoUsado(OpcionNuevoUsado carroNuevoUsado) {
+	this.carroNuevoUsado = carroNuevoUsado;
+}
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * Método hashcode de la entidad Vehiculo
@@ -224,6 +717,30 @@ public class Vehiculo implements Serializable {
 			return false;
 		return true;
 	}
+
+
+
+
+
+
+	/**
+	 * Método ToString de la entidad Vehiculo
+	 */
+
+
+
+	@Override
+	public String toString() {
+		return "Vehiculo [id=" + id + ", precio=" + precio + ", placa=" + placa  + ", descripcion=" + descripcion + ", color=" + color
+				+ ", anio=" + anio + ", cilindraje=" + cilindraje + ", numeroPuertas=" + numeroPuertas
+				+ ", tipocombustible=" + tipocombustible + ", tipovehiculo=" + tipovehiculo + ", persona=" + persona
+				+ ", ciudad=" + ciudad + ", tipoVehiculo=" + tipoVehiculo + ", tipoCombustible=" + tipoCombustible
+				+ ", modelo=" + modelo  + ", fotoVehiculo="
+				+ fotoVehiculos + ", caracteristica=" + caracteristica + "]";
+	}
+	
+	
+	
 	
 	
    

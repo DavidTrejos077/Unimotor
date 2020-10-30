@@ -3,6 +3,7 @@ package co.edu.uniquindio.unimotor.entidades;
 import java.io.Serializable;
 import java.lang.String;
 import java.util.Date;
+import java.util.jar.Attributes.Name;
 
 import javax.persistence.*;
 
@@ -11,6 +12,11 @@ import javax.persistence.*;
  *
  */
 @Entity
+
+@NamedQueries ({
+	                                                              //Seleccioneme todas las personas que hicieron una pregunta sobre este carro especifico
+	@NamedQuery (name = "LISTA_PERSONAS_PREGUNTA_VEHICULO",query = "select distinct p.persona from Pregunta p where p.vehiculo.id = :id")
+})
 
 public class Pregunta implements Serializable {
 
@@ -38,7 +44,7 @@ public class Pregunta implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_pregunta", nullable=true)
-	private Pregunta pregunta;
+	private Pregunta respuesta;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -56,14 +62,40 @@ public class Pregunta implements Serializable {
 	 *
 	 */
 	
-	public Pregunta(int id, String texto_de_la_pregunta, Date fecha) {
+	public Pregunta( String texto_de_la_pregunta, Persona persona, Vehiculo vehiculo) {
 		super();
-		this.id = id;
+	
 		this.texto_de_la_pregunta = texto_de_la_pregunta;
-		this.fecha = fecha;
+		this.fecha = new Date();
+		this.persona = persona;
+		this.vehiculo = vehiculo;
 	}
 
 
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
+
+	public Vehiculo getVehiculo() {
+		return vehiculo;
+	}
+
+	public void setVehiculo(Vehiculo vehiculo) {
+		this.vehiculo = vehiculo;
+	}
+
+	public Pregunta getRespuesta() {
+		return respuesta;
+	}
+
+	public void setRespuesta(Pregunta respuesta) {
+		this.respuesta = respuesta;
+	}
 
 	public int getId() {
 		return this.id;

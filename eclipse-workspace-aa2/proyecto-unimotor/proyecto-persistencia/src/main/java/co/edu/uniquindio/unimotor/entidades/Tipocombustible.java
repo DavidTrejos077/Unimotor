@@ -20,8 +20,7 @@ public class Tipocombustible implements Serializable {
 	private String nombre;
 	private static final long serialVersionUID = 1L;
 	
-	@OneToMany(mappedBy = "tipoCombustible")
-	private List<Vehiculo> vehiculo;
+
 
 	
 	/**

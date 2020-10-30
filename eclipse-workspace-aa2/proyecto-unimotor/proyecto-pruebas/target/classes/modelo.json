@@ -1,0 +1,25 @@
+{
+	"modelo": [
+		{
+			"id_modelo": 1,
+			"NOMBRE": "ONIX",
+			"id_marca":3
+			
+		},
+		{
+			"id_modelo": 2,
+			"NOMBRE": "LOGAN",
+			"id_marca": 1
+		},
+		{
+			"id_modelo": 3,
+			"NOMBRE": "SANDERO",
+			"id_marca":2
+		},
+		{
+			"id_modelo": 4,
+			"NOMBRE": "DUSTER",
+			"id_marca":2
+		}
+	]
+}

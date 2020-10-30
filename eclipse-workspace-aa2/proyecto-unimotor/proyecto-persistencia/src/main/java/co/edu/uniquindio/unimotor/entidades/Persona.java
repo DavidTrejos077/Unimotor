@@ -2,6 +2,7 @@ package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
 import java.lang.String;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,19 @@ import javax.validation.constraints.Min;
  *
  */
 @Entity
+
+@NamedQueries ({
+	
+	@NamedQuery(name = "TODAS_PERSONAS",query = "select count(p) from Persona p"),
+	@NamedQuery(name = "AUTENTICAR_PERSONA",query = "select p from Persona p where p.email = :email and p.clave = :clave"),
+	@NamedQuery(name = "LISTA_FAVORITOS_PERSONA",query = "select f from Persona p,IN (p.favoritos) f where p.email = :email"),
+	@NamedQuery(name = "LISTA_FAVORITOS_PERSONA_JOIN",query = "select f.vehiculo from Persona p join p.favoritos f where p.email = :email"),
+	@NamedQuery(name= "LISTA_PERSONAS_ORDENADAS_ALFABETICAMENTE",query= "select p from Persona p order by p.nombre asc"),
+	@NamedQuery(name= "LISTA_PERSONAS_USAN_CORREO_HOTMAIL",query= "select p from Persona p where p.email like '%hotmail%'"),
+	@NamedQuery(name= "BUSCAR_PERSONA_POR_CORREO",query= "select p from Persona p where p.email = :email"),
+	@NamedQuery(name= "BUSCAR_PERSONA_TELEFONO",query= "select p from Persona p where p.id = :telefonoFijo"),
+	@NamedQuery(name="LISTA_PERSONAS",query = "select p from Persona p")
+})
 
 public class Persona implements Serializable {
 
@@ -39,32 +53,23 @@ public class Persona implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_ciudad", nullable=false)
 	private Ciudad ciudad;
-	
-	@OneToMany(mappedBy = "persona")
-	private List<Telefono> telefono;
 
 	@OneToMany(mappedBy = "persona")
-	private List<Favorito> favorito;
+	private List<Favorito> favoritos;
 	
 	@OneToMany(mappedBy = "persona")
-	private List<Pregunta> pregunta;
+	private List<Pregunta> preguntas;
 	
 	@OneToMany(mappedBy = "persona")
-	private List<Vehiculo> vehiculo;
+	private List<Vehiculo> vehiculos;
 	
 	@Enumerated (EnumType.STRING)
 	private Genero genero;
 	
-	
-	
-	@Max(150)
-	@Column(name = "telefonoFijo", nullable=false)
-	private int telefonoFijo;
-	
-	
+	//tenían muchos campos para los teléfonos. Con este es suficiente
 	@ElementCollection
 	@JoinColumn(nullable=false)
-	private Map<String, Integer> telefonos;
+	private Map<String, Integer> telefonos; //este campo no puede ser null, según la restriccion que ustedes añadieron
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -83,22 +88,69 @@ public class Persona implements Serializable {
 	 * Constructor de la entidad persona con todos sus atributos.
 	 *
 	 */
-	
-	public Persona(int id, String nombre, String email, String clave, String direccion) {
+	public int getId() {
+		return this.id;
+	}
+
+	public Persona(int id, String nombre, String email, String clave, String direccion, Ciudad ciudad) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.email = email;
 		this.clave = clave;
 		this.direccion = direccion;
+		this.ciudad = ciudad;
+		this.favoritos = new ArrayList<Favorito>();
+		this.preguntas = new ArrayList<Pregunta>();
+		this.vehiculos = new ArrayList<Vehiculo>();
+		
 	}
 
 
-
-
-	public int getId() {
-		return this.id;
+	public Ciudad getCiudad() {
+		return ciudad;
 	}
+
+
+	public void setCiudad(Ciudad ciudad) {
+		this.ciudad = ciudad;
+	}
+
+
+	public List<Favorito> getFavorito() {
+		return favoritos;
+	}
+
+
+	public void setFavorito(List<Favorito> favorito) {
+		this.favoritos = favorito;
+	}
+
+
+	public List<Pregunta> getPregunta() {
+		return preguntas;
+	}
+
+
+	public void setPregunta(List<Pregunta> pregunta) {
+		this.preguntas = pregunta;
+	}
+
+
+	public List<Vehiculo> getVehiculo() {
+		return vehiculos;
+	}
+
+
+	public void setVehiculo(List<Vehiculo> vehiculo) {
+		this.vehiculos = vehiculo;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 
 	public void setId(int id) {
 		this.id = id;
@@ -139,6 +191,16 @@ public class Persona implements Serializable {
 	}
 	
 	
+	public Map<String, Integer> getTelefonos() {
+		return telefonos;
+	}
+
+
+	public void setTelefonos(Map<String, Integer> telefonos) {
+		this.telefonos = telefonos;
+	}
+
+
 	/**
 	 * Método hash code de la entidad Persona
 	 */
@@ -177,9 +239,11 @@ public class Persona implements Serializable {
 	@Override
 	public String toString() {
 		return "Persona [id=" + id + ", nombre=" + nombre + ", email=" + email + ", clave=" + clave + ", direccion="
-				+ direccion + ", ciudad=" + ciudad + ", telefono=" + telefono + ", genero=" + genero + ", telefonoFijo="
-				+ telefonoFijo + "]";
+				+ direccion + ", ciudad=" + ciudad + ", telefono=" + telefonos + ", genero=" + genero + "]";
 	}
+	
+	
+	
 	
 	
 	

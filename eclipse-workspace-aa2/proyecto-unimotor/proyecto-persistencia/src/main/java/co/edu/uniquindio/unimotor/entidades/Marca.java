@@ -12,6 +12,10 @@ import javax.persistence.*;
  */
 @Entity
 
+@NamedQueries ({
+	
+})
+
 public class Marca implements Serializable {
 
 	   
@@ -19,6 +23,9 @@ public class Marca implements Serializable {
 	private int id;
 	private String nombre;
 	private static final long serialVersionUID = 1L;
+	
+	@OneToMany(mappedBy = "marca")
+	private List<Modelo> modelo;
 	
 	@OneToMany(mappedBy = "marca")
 	private List<Vehiculo> vehiculo;

@@ -82,5 +82,14 @@ public class Fotovehiculo implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Fotovehiculo [id=" + id + ", url=" + url + ", vehiculo=" + vehiculo + "]";
+	}
+
+	
+	
+	
    
 }
