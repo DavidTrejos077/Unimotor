@@ -1,8 +1,6 @@
 package co.edu.uniquindio.unimotor.prueba;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,13 +19,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.hazelcast.map.impl.query.Query;
-import com.sun.xml.rpc.processor.modeler.j2ee.xml.string;
-
-
-import co.edu.uniquindio.unimotor.entidades.TipovehiculoEnum;
-import co.edu.uniquindio.unimotor.entidades.Tranmision;
-import co.edu.uniquindio.unimotor.entidades.Vehiculo;
 import co.edu.uniquindio.unimotor.dto.ConsultaVehiculoCaracteristicasDTO;
 import co.edu.uniquindio.unimotor.dto.ConsultaVehiculosPorCadaMarcaDTO;
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
@@ -37,12 +28,13 @@ import co.edu.uniquindio.unimotor.entidades.Favorito;
 import co.edu.uniquindio.unimotor.entidades.Fotovehiculo;
 import co.edu.uniquindio.unimotor.entidades.Genero;
 import co.edu.uniquindio.unimotor.entidades.Marca;
-import co.edu.uniquindio.unimotor.entidades.Modelo;
 import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
 import co.edu.uniquindio.unimotor.entidades.Persona;
 import co.edu.uniquindio.unimotor.entidades.Pregunta;
 import co.edu.uniquindio.unimotor.entidades.Telefono;
 import co.edu.uniquindio.unimotor.entidades.TipoCombustibleEnum;
+import co.edu.uniquindio.unimotor.entidades.TipovehiculoEnum;
+import co.edu.uniquindio.unimotor.entidades.Vehiculo;
 
 
 

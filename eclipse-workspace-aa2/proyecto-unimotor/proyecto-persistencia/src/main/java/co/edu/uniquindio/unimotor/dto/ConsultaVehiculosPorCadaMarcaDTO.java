@@ -1,11 +1,5 @@
 package co.edu.uniquindio.unimotor.dto;
 
-
-
-import co.edu.uniquindio.unimotor.entidades.Vehiculo;
-
-
-
 public class ConsultaVehiculosPorCadaMarcaDTO {
 	
 	

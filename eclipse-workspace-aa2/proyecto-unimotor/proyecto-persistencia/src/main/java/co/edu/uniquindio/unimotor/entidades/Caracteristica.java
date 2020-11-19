@@ -1,11 +1,13 @@
 package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
-import java.lang.String;
 import java.util.List;
 
-import javax.enterprise.inject.Typed;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * Clase que implementa la entidad:Caracteristica

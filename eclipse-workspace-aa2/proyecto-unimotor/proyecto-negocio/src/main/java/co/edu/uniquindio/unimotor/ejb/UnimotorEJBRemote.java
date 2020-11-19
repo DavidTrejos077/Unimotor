@@ -3,13 +3,10 @@ package co.edu.uniquindio.unimotor.ejb;
 import java.util.List;
 
 import javax.ejb.Remote;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
 import co.edu.uniquindio.unimotor.entidades.Cliente;
-import co.edu.uniquindio.unimotor.entidades.Favorito;
 import co.edu.uniquindio.unimotor.entidades.Marca;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
 import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;

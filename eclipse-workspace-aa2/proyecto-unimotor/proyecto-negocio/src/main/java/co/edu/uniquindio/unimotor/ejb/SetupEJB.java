@@ -1,7 +1,6 @@
 package co.edu.uniquindio.unimotor.ejb;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
