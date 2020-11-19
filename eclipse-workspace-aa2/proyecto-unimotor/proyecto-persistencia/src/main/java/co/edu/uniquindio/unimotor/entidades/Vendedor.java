@@ -18,7 +18,11 @@ public class Vendedor extends Persona implements Serializable {
 	public Vendedor(int id, String nombre, String email, String clave, String direccion, Ciudad ciudad) {
 		super(id,nombre,email,clave,direccion,ciudad);
 	}
-   
+
+	public Vendedor(int id, String nombre, String email, String clave, String direccion) {
+		super(id,nombre,email,clave,direccion);
+	}
+	
 	public Vendedor () {
 		super ();
 	}

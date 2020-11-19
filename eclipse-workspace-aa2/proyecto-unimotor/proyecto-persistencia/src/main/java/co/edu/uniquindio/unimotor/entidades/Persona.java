@@ -10,6 +10,8 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -18,14 +20,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * Implementación de la clase para la entidad:Persona
  *
  */
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) //Hay algo en la herencia que está ocasionando un error
 @NamedQueries ({
 	
 	@NamedQuery(name = "TODAS_PERSONAS",query = "select count(p) from Persona p"),
@@ -38,43 +42,43 @@ import javax.validation.constraints.NotBlank;
 })
 
 public class Persona implements Serializable {
-
 	
 	@Id
-	@NotBlank(message = "Please enter id")  
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "cedula")
 	private int id;
 	
 	@NotBlank (message = "El nombre no puede ser vacio")
+	@Size(max = 100)
 	@Column(name = "nombre", length=100, nullable=false)
 	private String nombre;
 	
+	@Email
+	@Size(min = 5, max = 200, message= "El email debe tener entre 5 y 200 caracteres")
 	@NotBlank(message = "El email no puede ser vacio")
 	@Column(name = "email", length=200 , unique = true , nullable=false)
 	private String email;
 	
 	@NotBlank (message = "La clave no puede ser vacio")
+	@Size(max=50)
 	@Column(name = "clave", length=50, nullable=false)
 	private String clave;
 	
 	@NotBlank 
+	@Size(max=300)
 	@Column(name = "direccion", length=300, nullable=false)
 	private String direccion;
 	
-	
 	@ManyToOne
-	@JoinColumn(name = "id_ciudad", nullable=false)
+	@JoinColumn(name = "id_ciudad", nullable=true)
 	private Ciudad ciudad;
-
-    @OneToMany(mappedBy = "persona")
-	private List<Vehiculo> vehiculos;
 	
 	@Enumerated (EnumType.STRING)
 	private Genero genero;
 	
 	//tenían muchos campos para los teléfonos. Con este es suficiente
 	@ElementCollection
-	@JoinColumn(nullable=false)
+	@JoinColumn(name="telefono",nullable=true)
 	private Map<String, Integer> telefonos; //este campo no puede ser null, según la restriccion que ustedes añadieron
 	
 	private static final long serialVersionUID = 1L;
@@ -106,10 +110,19 @@ public class Persona implements Serializable {
 		this.clave = clave;
 		this.direccion = direccion;
 		this.ciudad = ciudad;
-		this.vehiculos = new ArrayList<Vehiculo>();
 		
 	}
+	
 
+	public Persona(int id, String nombre, String email, String clave, String direccion) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.email = email;
+		this.clave = clave;
+		this.direccion = direccion;
+		
+	}
 
 	public Ciudad getCiudad() {
 		return ciudad;
@@ -118,21 +131,6 @@ public class Persona implements Serializable {
 
 	public void setCiudad(Ciudad ciudad) {
 		this.ciudad = ciudad;
-	}
-
-
-	
-
-	
-
-
-	public List<Vehiculo> getVehiculo() {
-		return vehiculos;
-	}
-
-
-	public void setVehiculo(List<Vehiculo> vehiculo) {
-		this.vehiculos = vehiculo;
 	}
 
 

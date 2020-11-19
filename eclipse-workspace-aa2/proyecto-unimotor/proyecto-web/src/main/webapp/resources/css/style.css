@@ -1,0 +1,89 @@
+body {
+	margin: 0;
+}
+
+.div-inline {
+	display: inline-block !important;
+	margin-right: 10px;
+}
+
+#header, #footer {
+	background: #8bcdcd;
+	border-bottom: 1px solid #c8c8c8;
+}
+
+.mi-menu.ui-menu {
+	background: none;
+	border: none;
+}
+
+.input-search .ui-inputtext {
+	width: 600px;
+}
+
+.p-grid {
+	width: 100% !important;
+	margin: 0 !important;
+}
+
+.ui-dataview-list .ui-dataview-row {
+	border-bottom: 1px solid #A8A8A8 !important;
+	padding: 25px 10px;
+}
+
+.logo {
+	width: 5%;
+}
+
+.detail {
+	width: 85%;
+	padding-left: 25px;
+}
+
+.imagen-vehiculo{
+	max-width: 200px;
+}
+
+.box, .sample-layout>div {
+	background-color: #f4f4f4;
+	text-align: center;
+	padding: 1em;
+	border-radius: 4px;
+	border: 1px solid #c8c8c8;
+}
+
+.box, .lista-carac {
+	width: 100%;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.ui-galleria{
+	width: 80% !important;
+	margin: 0 auto;
+}
+
+.ui-galleria-panel-wrapper, .ui-galleria-panel{
+	width: 100% !important;
+}
+
+.ui-galleria-panel img{
+	max-width: 100%;
+	position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.ui-galleria{
+	border: 0px !important;	
+}
+
+.ui-galleria-frame-content img{
+	max-width: 60px;
+	width: auto !important;
+}
+
+

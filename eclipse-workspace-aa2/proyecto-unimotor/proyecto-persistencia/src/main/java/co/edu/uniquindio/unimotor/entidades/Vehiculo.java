@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -19,6 +22,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 /**
  * Clase que implementa la entidad:Vehiculo
@@ -27,7 +31,7 @@ import javax.validation.constraints.Positive;
 @Entity 
 @NamedQueries ({ @NamedQuery(name = "TODOS_VEHICULOS", query = "select v from Vehiculo v"),
 @NamedQuery(name = "TODOS_VEHICULOS_CIUDAD",query = "select v from Vehiculo v where v.ciudad = ?1"),
-
+@NamedQuery(name = "BUSCAR_VEHICULOS", query = "select v from Vehiculo v where v.nombrePublicacion like :busqueda"),
                                                   //Solicitado      //Contexto                     //Condicion
 @NamedQuery(name = "TODOS_VEHICULOS_ANIO",query = "select v from Vehiculo v where v.anio between 1960 and 2019"),
 @NamedQuery(name = "VEHICULO_DESCRIPCION",query = "select v.descripcion from Vehiculo v where v.color = :color"),
@@ -39,7 +43,7 @@ import javax.validation.constraints.Positive;
 @NamedQuery (name="NUMERO_DE_VEHICULOS_CON_UNA_CARACTERISTICA_ESPECIFICA",query = "select COUNT(v) from Vehiculo v join v.caracteristica c where c.id = :id"),
 @NamedQuery (name="NUMERO_DE_VEHICULOS_POR_CADA_MARCA",query ="select  new co.edu.uniquindio.unimotor.dto.ConsultaVehiculosPorCadaMarcaDTO (v.id,v.marca.nombre,count(v)) from Vehiculo v group by v.marca"),
 @NamedQuery (name="LISTA_VEHICULOS_SIN_PREGUNTA",query = "select v from Vehiculo v where v.preguntas is empty"),
-@NamedQuery (name="NUMERO_DE_VEHICULOS_POR_TIPO",query ="select  v.id,v.marca,count(v) from Vehiculo v group by v.tipoVehiculo"),
+@NamedQuery (name="NUMERO_DE_VEHICULOS_POR_TIPO",query ="select  v.id,v.marca,count(v) from Vehiculo v group by v.tipovehiculo"),
 @NamedQuery (name = "VALOR_PROMEDIO_DE_VEHICULOS",query = "select avg(v.precio) from Vehiculo v  where v.marca.id = :marca and v.carroNuevoUsado IN :tipoCarro or v.carroNuevoUsado IN :tipoCarro2 and v.kilometraje between :precioMin and :precioMax and v.ciudad.id = :ciudad"),
 @NamedQuery (name = "LISTA_VEHICULOS_CON_TODAS_LAS_CARACTERISTICAS",query = "select v.id,v.persona, v.descripcion  from Vehiculo v join v.caracteristica c group by v having count (c) >4"),
 @NamedQuery (name = "VEHICULO_NUEVO_MAS_COSTOSO",query = "select max (v.descripcion), v from Vehiculo v where v.carroNuevoUsado = :tipoCarro and  v.ciudad.id = :ciudad"),
@@ -58,16 +62,18 @@ public class Vehiculo implements Serializable {
 
 	   
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_vehiculo", length=12)
 	private int id;
 	
-	@NotBlank(message = "Nombre de publicacion no puede ser vacio")  
-	@Column(name = "nombrePublicacion", length=100)
+	@NotBlank(message = "Nombre de publicacion no puede ser vacio") 
+	@Size(max=200)
+	@Column(name = "nombrePublicacion", length=200)
 	private String nombrePublicacion;
 	
-	@Positive
-	@NotBlank(message = "El precio no puede ser vacio")  
-	@Column(name = "precio", nullable=false)	private long precio;
+	@Positive 
+	@Column(name = "precio", nullable=false)
+	private long precio;
 	
 	
 	@Column(name = "placa", nullable=false, unique=true)
@@ -76,12 +82,14 @@ public class Vehiculo implements Serializable {
 	@Positive 
 	@Column (name = "kilometraje", nullable=false)
 	private long kilometraje;
-	
-	@NotBlank(message = "La descripcion no puede ser vacia")  
+	 
+	@NotBlank(message = "La descripcion no puede ser vacia") 
+	@Size(max=200)
 	@Column(name = "descripcion", length=200, nullable=false)
 	private String descripcion;
-	
-	@NotBlank(message = "El color no puede ser vacio")  
+	 
+	@NotBlank(message = "El color no puede ser vacio")
+	@Size(max=25)
 	@Column(name = "color", length=25, nullable=false)
 	private String color;
 	
@@ -98,6 +106,7 @@ public class Vehiculo implements Serializable {
 	@Positive
 	@Column(name = "numeropuertas", nullable=false)
 	private Integer numeroPuertas;
+	
 	private static final long serialVersionUID = 1L;
 	
 	@Enumerated (EnumType.STRING)
@@ -115,7 +124,7 @@ public class Vehiculo implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_persona", nullable=false)
-	private Persona persona;
+	private Cliente persona;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_ciudad", nullable=false)
@@ -127,31 +136,27 @@ public class Vehiculo implements Serializable {
 	
 	
 	
-	@ManyToOne
-	@JoinColumn(name = "id_tipovehiculo", nullable=false)
-	private Tipovehiculo tipoVehiculo;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "id_tipocombustible", nullable=false)
-	private Tipocombustible tipoCombustible;
-	
+
+
 	@ManyToOne
 	@JoinColumn(name = "id_modelo", nullable=false)
 	private Modelo modelo;
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
-	@JoinColumn(nullable=true)	private List<Favorito> favoritos;
+	@JoinColumn(nullable=true)
+	private List<Favorito> favoritos;
 	
 	
 	@OneToMany(mappedBy = "vehiculo")
-	@JoinColumn(nullable=true)	private List<Pregunta> preguntas;
+	@JoinColumn(nullable=true)
+	private List<Pregunta> preguntas;
 	
 	
 	
-	@OneToMany(mappedBy = "vehiculo")	@JoinColumn(nullable=false)
-	private List<Fotovehiculo> fotoVehiculos;
+	@ElementCollection
+	@JoinColumn(nullable=false)
+	private ArrayList<String> fotoVehiculos;
 	
 	@ManyToMany 
 	private List <Caracteristica> caracteristica;
@@ -186,7 +191,7 @@ public class Vehiculo implements Serializable {
 	 *
 	 */
 
-		
+	
 	
 	public int getId() {
 		return this.id;
@@ -212,10 +217,9 @@ public class Vehiculo implements Serializable {
 
 
 	public Vehiculo(int id, String nombrePublicacion, long precio,String placa, long kilometraje, String descripcion, String color, int anio, int cilindraje,
-			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible, Tranmision tranmision,
-			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Persona persona, Ciudad ciudad,
-			Marca marca, Modelo modelo, 
-			List<Fotovehiculo> fotoVehiculo, List<Caracteristica> caracteristica) {
+			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible, Tranmision transmision,
+			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Cliente persona, Ciudad ciudad,
+			List<Fotovehiculo> fotoVehiculo, List<Caracteristica> caracteristica, ArrayList <String>fotoVehiculos) {
 		super();
 		this.id = id;
 		this.nombrePublicacion=nombrePublicacion;
@@ -228,18 +232,19 @@ public class Vehiculo implements Serializable {
 		this.cilindraje = cilindraje;
 		this.numeroPuertas = numeroPuertas;
 		this.tipocombustible = tipocombustible;
-		this.transmision = this.transmision;
+		this.transmision = transmision;
 		this.carroNuevoUsado = carroNuevoUsado;
 		this.tipovehiculo = tipovehiculo;
 		this.persona = persona;
 		this.ciudad = ciudad;
-		this.marca = marca;		this.modelo = modelo;
+		this.marca = marca;
+		this.modelo = modelo;
 		this.favoritos= new ArrayList<>();
 		this.preguntas = new ArrayList<>();
-		this.fotoVehiculos = fotoVehiculo;
+		this.fotoVehiculos= new ArrayList<>();
 		this.caracteristica = caracteristica;
 	}
-	
+
 
 
 
@@ -353,7 +358,7 @@ public class Vehiculo implements Serializable {
 
 
 
-	public Persona getPersona() {
+	public Cliente getPersona() {
 		return persona;
 	}
 
@@ -366,7 +371,7 @@ public class Vehiculo implements Serializable {
 
 
 
-	public void setPersona(Persona persona) {
+	public void setPersona(Cliente persona) {
 		this.persona = persona;
 	}
 
@@ -405,9 +410,8 @@ public class Vehiculo implements Serializable {
 
 
 
-	public Tipovehiculo getTipoVehiculo() {
-		return tipoVehiculo;
-	}
+
+	
 
 
 
@@ -418,9 +422,8 @@ public class Vehiculo implements Serializable {
 
 
 
-	public void setTipoVehiculo(Tipovehiculo tipoVehiculo) {
-		this.tipoVehiculo = tipoVehiculo;
-	}
+
+	
 
 
 
@@ -431,9 +434,8 @@ public class Vehiculo implements Serializable {
 
 
 
-	public Tipocombustible getTipoCombustible() {
-		return tipoCombustible;
-	}
+
+	
 
 
 
@@ -444,10 +446,8 @@ public class Vehiculo implements Serializable {
 
 
 
-	public void setTipoCombustible(Tipocombustible tipoCombustible) {
-		this.tipoCombustible = tipoCombustible;
-	}
 
+	
 
 
 
@@ -535,7 +535,19 @@ public class Vehiculo implements Serializable {
 
 
 
-	public List<Fotovehiculo> getFotoVehiculos() {
+
+	
+
+
+
+
+
+
+
+
+
+
+	public ArrayList<String> getFotoVehiculos() {
 		return fotoVehiculos;
 	}
 
@@ -548,7 +560,8 @@ public class Vehiculo implements Serializable {
 
 
 
-	public void setFotoVehiculos(List<Fotovehiculo> fotoVehiculos) {
+
+	public void setFotoVehiculos(ArrayList<String> fotoVehiculos) {
 		this.fotoVehiculos = fotoVehiculos;
 	}
 
@@ -629,9 +642,10 @@ public class Vehiculo implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}   
-	public float getPrecio() {
+	public long getPrecio() {
 		return this.precio;
 	}
+
 	public void setPrecio(long precio) {
 		this.precio = precio;
 	}   
@@ -756,7 +770,13 @@ public void setCarroNuevoUsado(OpcionNuevoUsado carroNuevoUsado) {
 
 
 
-
+public String getImagenPrincipal () {
+	
+	if (!fotoVehiculos.isEmpty()) {
+		return fotoVehiculos.get(0);
+	}
+	 return "defecto.jpg";
+}
 
 
 
@@ -809,7 +829,7 @@ public void setCarroNuevoUsado(OpcionNuevoUsado carroNuevoUsado) {
 		return "Vehiculo [id=" + id + ", precio=" + precio + ", placa=" + placa  + ", descripcion=" + descripcion + ", color=" + color
 				+ ", anio=" + anio + ", cilindraje=" + cilindraje + ", numeroPuertas=" + numeroPuertas
 				+ ", tipocombustible=" + tipocombustible + ", tipovehiculo=" + tipovehiculo + ", persona=" + persona
-				+ ", ciudad=" + ciudad + ", tipoVehiculo=" + tipoVehiculo + ", tipoCombustible=" + tipoCombustible
+				+ ", ciudad=" + ciudad 
 				+ ", modelo=" + modelo  + ", fotoVehiculo="
 				+ fotoVehiculos + ", caracteristica=" + caracteristica + "]";
 	}

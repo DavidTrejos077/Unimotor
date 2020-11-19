@@ -27,6 +27,9 @@ public class Cliente extends Persona implements Serializable  {
 	
 	@OneToMany(mappedBy = "persona")
 	private List<Pregunta> preguntas;
+	
+	@OneToMany(mappedBy = "persona")
+	private List<Vehiculo> vehiculos;
 
 	public Cliente() {
 		super();
@@ -38,6 +41,16 @@ public class Cliente extends Persona implements Serializable  {
 	 */
 	public Cliente(int id, String nombre, String email, String clave, String direccion, Ciudad ciudad) {
 		super(id,nombre,email,clave,direccion,ciudad);
+		this.favoritos = new ArrayList<>();
+		this.preguntas = new ArrayList<>();
+	}
+	
+	/**
+	 * @param favoritos
+	 * @param preguntas
+	 */
+	public Cliente(int id, String nombre, String email, String clave, String direccion) {
+		super(id,nombre,email,clave,direccion);
 		this.favoritos = new ArrayList<>();
 		this.preguntas = new ArrayList<>();
 	}

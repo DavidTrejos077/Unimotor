@@ -13,18 +13,19 @@ import javax.persistence.*;
 @Entity
 
 @NamedQueries ({
-	
+	@NamedQuery (name="LISTA_MARCA",query = "select m from Marca m")
 })
 
 public class Marca implements Serializable {
 
 	   
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String nombre;
 	private static final long serialVersionUID = 1L;
 	
-	@OneToMany(mappedBy = "marca")
+	@OneToMany(mappedBy = "marca") //
 	private List<Modelo> modelo;
 	
 	@OneToMany(mappedBy = "marca")
@@ -41,9 +42,8 @@ public class Marca implements Serializable {
 	/**
 	 * Constructor de la clase Marca con todos sus atributos
 	 */
-	public Marca(int id, String nombre) {
+	public Marca( String nombre) {
 		super();
-		this.id = id;
 		this.nombre = nombre;
 	}
 

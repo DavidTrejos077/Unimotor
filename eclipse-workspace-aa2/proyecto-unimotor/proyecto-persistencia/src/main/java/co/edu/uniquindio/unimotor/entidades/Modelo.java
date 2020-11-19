@@ -14,8 +14,8 @@ import javax.persistence.*;
 
 @NamedQueries ({
 	
-	@NamedQuery (name="LISTA_MODELOS",query = "select m from Modelo m")
-	
+	@NamedQuery (name="LISTA_MODELOS",query = "select m from Modelo m"),
+	@NamedQuery (name="LISTA_MODELOS_MARCA",query = "select m from Modelo m where m.marca = :marca")
 	
 })
 
@@ -24,8 +24,10 @@ public class Modelo implements Serializable {
 
 	   
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_modelo")
 	private int id;
+	
 	private String nombre;
 	private static final long serialVersionUID = 1L;
 	
@@ -52,10 +54,10 @@ public class Modelo implements Serializable {
 	 */
 	
 	
-	public Modelo(int id, String nombre) {
+	public Modelo(String nombre, Marca marca) {
 		super();
-		this.id = id;
 		this.nombre = nombre;
+		this.marca = marca;
 	}
 
 

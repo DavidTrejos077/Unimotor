@@ -65,71 +65,31 @@
 
 	<div id="content" align="center">
 		<h:form>
-			<p:outputLabel
-				value="Inscríbete
-     Con esta cuenta podrás entrar a Unimotor para comprar o vender carros."></p:outputLabel>
-			<h:panelGrid columns="3" cellpadding="5">
+			<h:panelGrid columns="3" cellpadding="5" style="align:center">
 
-
-				<p:outputLabel for="nombre_persona" value="Nombre:"></p:outputLabel>
-				<p:inputText id="nombre_persona"
-					value="#{usuarioBean.persona.nombre}" required="true">
-				</p:inputText>
-				<p:message for="nombre_persona" />
-				<p:outputLabel for="cedula_persona" value="Cedula:"></p:outputLabel>
-				<p:inputText id="cedula_persona" value="#{usuarioBean.persona.id}"
+				<p:outputLabel for="email_usuario" value="Email Usuario:"></p:outputLabel>
+				<p:inputText id="email_usuario" value="#{loginBean.persona.email}"
 					required="true">
 				</p:inputText>
-				<p:message for="cedula_persona" />
-				<p:outputLabel for="email_persona" value="Email:"></p:outputLabel>
-				<p:inputText id="email_persona" value="#{usuarioBean.persona.email}"
-					required="true">
-					
+				<p:message for="email_usuario" />
+
+				<p:outputLabel for="password_usuario" value="Password:"></p:outputLabel>
+				<p:inputText id="password_usuario"
+					value="#{loginBean.persona.clave}" required="true">
 				</p:inputText>
-				<p:message for="email_persona" />
-				<p:outputLabel for="clave_persona" value="Clave:"></p:outputLabel>
-				<p:password id="clave_persona" value="#{usuarioBean.persona.clave}"
-					required="true">
-				</p:password>
-				<p:message for="clave_persona" />
-				<p:outputLabel for="direccion_persona" value="Direccion:"></p:outputLabel>
-				<p:inputText id="direccion_persona"
-					value="#{usuarioBean.persona.direccion}" required="true">
-				</p:inputText>
-				<p:message for="direccion_persona" />
-
-				<p:outputLabel value="Ciudad:"></p:outputLabel>
-				<p:selectOneMenu value="#{usuarioBean.persona.ciudad.id}">
-					<f:selectItem itemLabel="Seleccione" itemValue="0" />
-					<f:selectItems value="#{usuarioBean.listaCiudades}" var="ciudadT"
-						itemLabel="#{ciudadT.nombre}" itemValue="#{ciudadT.id}"></f:selectItems>
-				</p:selectOneMenu>
-
-				<br />
-				<p:outputLabel for="generoId" value="Genero:"></p:outputLabel>
-				<p:selectOneRadio id="generoId" value="#{usuarioBean.genero}"
-					unselectable="true">
-					<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
-					<f:selectItem itemLabel="Femenino" itemValue="Femenino" />
-				</p:selectOneRadio>
-				<br />
-				<p:outputLabel for="tipoPersona" value="Tipo de Persona:"></p:outputLabel>
-				<p:selectOneRadio id="tipoPersona"
-					value="#{usuarioBean.tipoPersona}" unselectable="true">
-					<f:selectItem itemLabel="Cliente" itemValue="Cliente" />
-					<f:selectItem itemLabel="Vendedor" itemValue="Vendedor" />
-				</p:selectOneRadio>
-				<br />
-
-
+				<p:message for="password_usuario" />
 			</h:panelGrid>
-			<br />
-			<p:commandButton value="Registrarme" id="ajax"
-				action="#{usuarioBean.registrar}" style="margin-right:20px;"
+
+			<p:commandButton value="Iniciar Sesión" id="ajax"
+				action="#{loginBean.iniciarSesion}" style="margin-right:20px;"
 				styleClass="ui-priority-primary" update="@form" />
-
-			<p:messages id="messages" showDetail="true" />
-
+			<br />
+			<br />
+			<p:link outcome="indexRecuperarPassword" value="Olvido su contraseña">
+				<br />
+				<br />
+				<p:messages id="messages" showDetail="true" />
+			</p:link>
 		</h:form>
 	</div>
 
@@ -148,7 +108,6 @@
 			</div>
 		</div>
 	</div>
-
 
 </h:body>
 </html>

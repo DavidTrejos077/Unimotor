@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.ejb.Remote;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
 import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Favorito;
+import co.edu.uniquindio.unimotor.entidades.Marca;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
 import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
 import co.edu.uniquindio.unimotor.entidades.Persona;
@@ -24,6 +26,8 @@ public interface UnimotorEJBRemote {
 	void registrarCliente (Cliente cliente) throws Exception;
 	
 	void modificarCliente (Cliente cliente) throws PersonaInexistenteExcepcion;
+	  
+	
 	
 	void eliminarCliente (Cliente cliente) throws PersonaInexistenteExcepcion;
 	
@@ -42,6 +46,8 @@ public interface UnimotorEJBRemote {
 	List <Pregunta> obtenerListaPreguntas();
 	
 	List <Persona> obtenerListaPersonas();
+	
+	Cliente obtenerPorEmail (String email) throws Exception;
 	
 	void modificarVehiculo (Vehiculo vehiculo)throws VehiculoInexistenteExcepcion;
 	
@@ -72,12 +78,19 @@ public interface UnimotorEJBRemote {
 	
 	
 	List <Vehiculo> buscarVehiculosPorFiltro (OpcionNuevoUsado carroNuevoUsado, int idMarca, long precioMin,long precioMax,int anioInicio,int anioFin) throws Exception;
-		
-		
+
+	/**
+	 * Método para obtener la lista de modelos por marca.
+	 */
+	List<Modelo> obtenerListaModelosPorMarca(Marca marca);
+
+	public Persona buscarPersona(String email) throws Exception;
 	
+	public void modificarPersona(Persona persona) throws PersonaInexistenteExcepcion;
+	
+	public void registrarPersona (Persona persona) throws Exception;
 		
-	
-	
+	List <Vehiculo> buscarVehiculos (String busqueda);
 	
 	
 	

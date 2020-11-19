@@ -1,94 +1,90 @@
 package co.edu.uniquindio.unimotor.beans;
 
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import co.edu.uniquindio.unimotor.ejb.UnimotorEJB;
-import co.edu.uniquindio.unimotor.ejb.UnimotorEJBRemote;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
-import co.edu.uniquindio.unimotor.entidades.Cliente;
+
 import co.edu.uniquindio.unimotor.entidades.Genero;
 import co.edu.uniquindio.unimotor.entidades.Persona;
-import co.edu.uniquindio.unimotor.entidades.Vendedor;
+
+
 
 @Named
-@ApplicationScoped
-public class UsuarioBean {
+@ViewScoped
+public class UsuarioBean implements Serializable  {
+
+	
+
+	private static final long serialVersionUID = 1L;
 
 	@EJB
-	UnimotorEJBRemote unimotor;
+	private UnimotorEJB unimotor;
 
-	private Cliente cliente;
-
-	private String cedula;
-
-	private String nombre;
-
-	private String email;
-
-	private String clave;
-
-	private String direccion;
-
-
-	private String ciudad;
-
+	private Persona persona;
+	
+	private List<SelectItem> listaCiudades = new ArrayList<SelectItem>();
+	
 	private String genero;
 
 	private String tipoPersona;
 
-
+	 @PostConstruct
+    public void init() {
+		 
+		System.out.println("init");
+		Ciudad ciudadPersona = new Ciudad();
+		persona = new Persona();
+		persona.setCiudad(ciudadPersona);
+		List<Ciudad> listaCiudadesDB =  unimotor.obtenerListaCiudades();
+		for(Ciudad temp: listaCiudadesDB) {
+			SelectItem select = new SelectItem();
+			select.setLabel(temp.getNombre());
+			select.setValue(String.valueOf(temp.getId()));
+			listaCiudades.add(select);
+		}
+	}
+	 
+	 
 	public void registrar () {
 
 		try {
 
-			unimotor.registrarCliente(cliente);
-			System.out.println(cedula);
-			System.out.println(nombre);
-			System.out.println(email);
-			System.out.println(clave);
-			System.out.println(direccion);
-			System.out.println(ciudad);
-			System.out.println(genero);
+			//Acá pasa lo mismo que con el vehículo, no pueden crear objetos y asignarlos porque esos objetos
+			//que crea acá no existen en la bd
+	
+			//Debe crear un método que retorne una ciudad dado un código
+			
+			System.out.println("selección: "+tipoPersona);
 
-			Ciudad ciudad = new Ciudad();
-			ciudad.setId(8);
-
-
-
-			if (tipoPersona.equals("Cliente")) {
-
-				Cliente clienteNuevo = new Cliente(Integer.parseInt(cedula), nombre, email, clave, direccion, ciudad);
+			
 
 				if (genero.equals("Masculino")) {
-					clienteNuevo.setGenero(Genero.MASCULINO);
+					persona.setGenero(Genero.MASCULINO);
 				}else {
-					clienteNuevo.setGenero(Genero.FEMENINO);;
+					persona.setGenero(Genero.FEMENINO);;
 				}
 
-				unimotor.registrarCliente(clienteNuevo);
+				unimotor.registrarPersona(persona);
+				
 
 				FacesMessage msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "¡Registro Exitoso!");
 				FacesContext.getCurrentInstance().addMessage(null, msj);
 
 
-			}else {
-				Vendedor vendedor1= new Vendedor(Integer.parseInt(cedula), nombre, email, clave, direccion, ciudad);
-				if (genero.equals("Masculino")) {
-					vendedor1.setGenero(Genero.MASCULINO);;
-				}else {
-					vendedor1.setGenero(Genero.FEMENINO);;
-				}
 
-
-				unimotor.registrarVendedor(vendedor1);
-				FacesMessage msj = new FacesMessage(FacesMessage.SEVERITY_INFO, "Alerta", "¡Registro Exitoso!");
-				FacesContext.getCurrentInstance().addMessage(null, msj);
-
-			}
+			
 
 		} catch (Exception e) {
 
@@ -96,110 +92,6 @@ public class UsuarioBean {
 			FacesContext.getCurrentInstance().addMessage(null, msj);
 			e.printStackTrace();
 		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	public String getCedula() {
-		return cedula;
-	}
-
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getClave() {
-		return clave;
-	}
-
-	public void setClave(String clave) {
-		this.clave = clave;
-	}
-
-	public String getDireccion() {
-		return direccion;
-	}
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
-
-	public String getCiudad() {
-		return ciudad;
-	}
-
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
 	}
 
 	public String getGenero() {
@@ -220,9 +112,24 @@ public class UsuarioBean {
 		this.tipoPersona = tipoPersona;
 	}
 
+	public List<SelectItem> getListaCiudades() {
+		return listaCiudades;
+	}
+
+	public void setListaCiudades(List<SelectItem> listaCiudades) {
+		this.listaCiudades = listaCiudades;
+	}
 
 
+	public Persona getPersona() {
+		return persona;
+	}
 
 
+	public void setPersona(Persona persona) {
+		this.persona = persona;
+	}
 
+	
+	
 }

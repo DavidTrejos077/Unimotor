@@ -46,10 +46,9 @@ public class Ciudad implements Serializable {
 	 * Constructor de la entidad Ciudad con sus respectivos atributos.
 	 *
 	 */
-	
-	public Ciudad(int id, String nombre) {
+	//como el id es automático, no deben mandarlo por parámetro al constructor
+	public Ciudad(String nombre) {
 		super();
-		this.id = id;
 		this.nombre = nombre;
 	}
 

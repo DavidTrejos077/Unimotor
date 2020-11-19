@@ -1,17 +1,9 @@
 package co.edu.uniquindio.unimotor.ejb;
 
 import java.util.List;
-import java.util.Properties;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.enterprise.inject.New;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,6 +12,7 @@ import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
 import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Favorito;
+import co.edu.uniquindio.unimotor.entidades.Marca;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
 import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
 import co.edu.uniquindio.unimotor.entidades.Persona;
@@ -53,20 +46,19 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	@Override
 	public void registrarCliente (Cliente cliente) throws Exception {
 
-		
 		try {
-			
-	System.out.println("Entro a registrar cliente");
-	if (buscarPersonaPorEmail(cliente.getEmail())) {
 
-		throw new Exception("El email ya está registrado en la base de datos");
-	}
+			System.out.println("Entro a registrar cliente");
+			if (buscarPersonaPorEmail(cliente.getEmail())) {
 
-	entityManager.persist(cliente);
-} catch (Exception e) {
-	
-}
-		
+				throw new Exception("El email ya está registrado en la base de datos");
+			}
+
+			entityManager.persist(cliente);
+		} catch (Exception e) {
+
+		}
+
 
 	}
 
@@ -104,7 +96,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 		entityManager.remove(cliente);
 	}
-	
+
 	/**
 	 * Método para registrar un vendedor en la base de datos.
 	 */
@@ -120,7 +112,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		entityManager.persist(vendedor);
 
 	}
-	
+
 	/**
 	 * Método para modificar un vendedor en la base de datos.
 	 */
@@ -138,8 +130,8 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 		entityManager.merge(vendedor);
 	}
-	
-	
+
+
 	/**
 	 * Método para eliminar un vendedor en la base de datos.
 	 */
@@ -161,6 +153,12 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	/**
 	 * Método para buscar una persona existente en la base de datos de acuerdo a un
 	 * email dado
+	 */
+	
+	/**
+	 * Este método les funciona?Si profe
+	 * @param email
+	 * @return
 	 */
 
 	public boolean buscarPersonaPorEmail(String email) {
@@ -215,6 +213,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	 */
 	@Override
 	public void registrarVehiculo(Vehiculo vehiculo) throws Exception {
+		System.out.println("registrarVehiculo");
 		if (buscarVehiculoPorPlaca(vehiculo.getPlaca())) {
 
 			throw new Exception("La placa ya está registrada");
@@ -329,6 +328,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 	@Override
 	public List<Ciudad> obtenerListaCiudades() {
+		System.out.println("obtenerListaCiudades");
 		TypedQuery<Ciudad> q = entityManager.createNamedQuery("LISTA_CIUDADES", Ciudad.class);
 		List<Ciudad> l = q.getResultList();
 
@@ -350,11 +350,23 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		return l;
 	}
 
-	
 
-	
+	/**
+	 * Método para obtener la lista de modelos por marca.
+	 */
+	@Override
+	public List<Modelo> obtenerListaModelosPorMarca(Marca marca) {
 
-		
+		TypedQuery<Modelo> q = entityManager.createNamedQuery("LISTA_MODELOS_MARCA", Modelo.class);
+		q.setParameter("marca", marca);
+		List<Modelo> l = q.getResultList();
+
+		System.out.println(l);
+		return l;
+	}
+
+
+
 
 	/**
 	 * Método para guardar un Vehiculo como favorito.
@@ -371,7 +383,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		Favorito f = new Favorito(cliente, vehiculo);
 
 		for (Favorito favorito : l) {
-			
+
 			if (favorito.getVehiculo().getPlaca() == (vehiculo.getPlaca())) {
 				throw new Exception("Este Vehiculo ya hace parte de tu lista de favoritos");
 			}
@@ -425,119 +437,212 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 	@Override
 	public void eliminarPreguntaVehiculo(Pregunta pregunta) throws NullPointerException {
-		
+
 		TypedQuery<Pregunta> q = entityManager.createNamedQuery("LISTA_PREGUNTAS_POR_PLACA", Pregunta.class);
 		q.setParameter("placa", pregunta.getVehiculo().getPlaca());
-		
+
 		List<Pregunta> l =q.getResultList();
 		for (Pregunta pregunta1 : l) {
 
 			if (pregunta1.getId()== pregunta.getId()) {
-				
+
 				l.remove(pregunta1);
 				break;
 			}
 		}
 
-	
-        pregunta.getVehiculo().setPreguntas(l);
+
+		pregunta.getVehiculo().setPreguntas(l);
 		entityManager.merge(pregunta.getVehiculo());
 
-	 }
-    /**
-     * Método para obtener la lista de preguntas de cualquier vehiculo.
-     */
+	}
+	/**
+	 * Método para obtener la lista de preguntas de cualquier vehiculo.
+	 */
 	@Override
 	public List<Pregunta> obtenerListaPreguntas() {
-		
+
 		TypedQuery<Pregunta> q = entityManager.createNamedQuery("LISTA_PREGUNTAS_POR_CADA_VEHICULO", Pregunta.class);
 		List<Pregunta> l = q.getResultList();
 
-		
-		
+
+
 		for (Pregunta p : l) {
 			System.out.println(p);
 		}
-		
-		
+
+
 		return l;
 
-	
+
 	}
 
 	@Override
 	public List<Vehiculo> buscarVehiculosPorFiltro(OpcionNuevoUsado carroNuevoUsado, int idMarca, long precioMin,long precioMax, int anioInicio, int anioFin) throws Exception {
-		
-	String consulta = "select v from Vehiculo v ";
-	String filtros = "";
-	
-	
-	
-	if(carroNuevoUsado != null) {
-		
-		if (filtros.equals("")) {
-			filtros = "where v.carroNuevoUsado = :tipo ";
-		}else {
-			filtros+= "and v.carroNuevoUsado = :tipo ";
+
+		String consulta = "select v from Vehiculo v ";
+		String filtros = "";
+
+
+
+		if(carroNuevoUsado != null) {
+
+			if (filtros.equals("")) {
+				filtros = "where v.carroNuevoUsado = :tipo ";
+			}else {
+				filtros+= "and v.carroNuevoUsado = :tipo ";
+			}
 		}
-	}
-	
-   if(idMarca == 0) {
-		
-		if (filtros.equals("")) {
-			filtros = "where v.marca.id = :id ";
-		}else {
-			filtros+= "and v.marca.id = :id ";
+
+		if(idMarca == 0) {
+
+			if (filtros.equals("")) {
+				filtros = "where v.marca.id = :id ";
+			}else {
+				filtros+= "and v.marca.id = :id ";
+			}
 		}
-	}
-	
-	
-   if(precioMin > 0 && precioMax >0) {
-		
-		if (filtros.equals("")) {
-			filtros = "where v.precio between :precioMin and :precioMax ";
-		}else {
-			filtros+= "and v.precio between :precioMin and :precioMax ";
+
+
+		if(precioMin > 0 && precioMax >0) {
+
+			if (filtros.equals("")) {
+				filtros = "where v.precio between :precioMin and :precioMax ";
+			}else {
+				filtros+= "and v.precio between :precioMin and :precioMax ";
+			}
 		}
-	}
-   
-   if(anioInicio > 0 && anioFin >0) {
-		
-		if (filtros.equals("")) {
-			filtros = "where v.anio between :anioInicio and :anioFin ";
-		}else {
-			filtros+= "and v.anio between :anioInicio and :anioFin ";
+
+		if(anioInicio > 0 && anioFin >0) {
+
+			if (filtros.equals("")) {
+				filtros = "where v.anio between :anioInicio and :anioFin ";
+			}else {
+				filtros+= "and v.anio between :anioInicio and :anioFin ";
+			}
 		}
-	}
-  
-   consulta +=  filtros;
-   
-	TypedQuery<Vehiculo> q = entityManager.createNamedQuery(consulta, Vehiculo.class);
-	List<Vehiculo> l = q.getResultList();
-   
-	return l;
-	
-	
-	
+
+		consulta +=  filtros;
+
+		TypedQuery<Vehiculo> q = entityManager.createNamedQuery(consulta, Vehiculo.class);
+		List<Vehiculo> l = q.getResultList();
+
+		return l;
+
+
+
 	}
 
 	@Override
 	public void responderPregunta(Pregunta pregunta, String respuesta) throws Exception {
-		
+
 		Pregunta preguntaNueva = new Pregunta(respuesta, pregunta.getPersona(), pregunta.getVehiculo());
-		
+
 		pregunta.setRespuesta(preguntaNueva);
-		
+
 		entityManager.merge(pregunta);
-		
+
+	}
+
+	/**
+	 * Ojo que tiene  dos métodos que hacen lo mismo
+	 */
+	@Override
+	public Cliente obtenerPorEmail(String email) throws Exception {
+
+		TypedQuery<Cliente> q = entityManager.createNamedQuery("BUSCAR_PERSONA_POR_CORREO", Cliente.class);
+		q.setParameter("email", email);
+
+		List<Cliente> l = q.getResultList();
+
+		if (l.isEmpty()) {
+			throw new Exception("Los datos de autenticacion son incorrectos");
+		}
+
+		System.out.println(l);
+
+		return l.get(0);
+
+
+
+
+	}
+
+	public List<Marca> obtenerListaMarcas() {
+		TypedQuery<Marca> q = entityManager.createNamedQuery("LISTA_MARCA", Marca.class);
+		List<Marca> l = q.getResultList();
+
+		System.out.println(l);
+		return l;
+	}
+
+
+
+	/**
+	 * Este método les funciona?Si profe
+	 * @param email
+	 * @return
+	 */
+
+	public Persona buscarPersona(String email) throws Exception{
+
+		TypedQuery<Persona> q = entityManager.createNamedQuery("BUSCAR_PERSONA_POR_CORREO", Persona.class);
+		q.setParameter("email", email); // Email que llega por parametro le enviamos.
+		List<Persona> l = q.getResultList();
+
+		if (l.isEmpty()) {
+			throw new Exception("Los datos de autenticacion son incorrectos");
+		}
+
+		return l.get(0);
+	}
+
+	/**
+	 * Método para modificar un cliente en la base de datos.
+	 */
+
+	@Override
+	public void modificarPersona(Persona persona) throws PersonaInexistenteExcepcion {
+
+		System.out.println("Actualizando Persona");
+		Persona buscado = entityManager.find(Persona.class, persona.getId());
+
+		if (buscado == null) {
+
+			throw new PersonaInexistenteExcepcion("El cliente no esta registrado");
+
+		}
+		entityManager.merge(persona);
 	}
 
 	
-	
+	@Override
+	public void registrarPersona (Persona persona) throws Exception {
 
-	
-	
-		
+		try {
+
+			System.out.println("Entro a registrar cliente");
+			if (buscarPersonaPorEmail(persona.getEmail())) {
+
+				throw new Exception("El email ya está registrado en la base de datos");
+			}
+
+			entityManager.persist(persona);
+		} catch (Exception e) {
+
+		}
+
+
 	}
 
-	
+	@Override
+	public List<Vehiculo> buscarVehiculos(String busqueda) {
+		
+		TypedQuery<Vehiculo> q= entityManager.createNamedQuery("BUSCAR_VEHICULOS", Vehiculo.class);
+		q.setParameter("busqueda", "%" +busqueda+ "%");
+		return q.getResultList();
+	}
+
+}
+
+

@@ -23,35 +23,55 @@ public class EmailUtility {
     public static void sendEmail(String host, String port,final String senderEmail, String senderName, final String password,
             String recipientEmail, String subject, String message) throws AddressException,
             MessagingException, UnsupportedEncodingException {
-  
-        // sets SMTP server properties
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-  
-        // creates a new session with an authenticator
-        Authenticator auth = new Authenticator() {
-            public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(senderEmail, password);
-            }
-        };
-  
-        Session session = Session.getInstance(properties, auth);
-  
-        // creates a new e-mail message
-        Message msg = new MimeMessage(session);
-  
-        msg.setFrom(new InternetAddress(senderEmail, senderName));
-        InternetAddress[] toAddresses = { new InternetAddress(recipientEmail) };
-        msg.setRecipients(Message.RecipientType.TO, toAddresses);
-        msg.setSubject(subject);
-        msg.setSentDate(new Date());
-        msg.setText(message);
-  
-        // sends the e-mail
-        Transport.send(msg);
+    	try {
+    		System.out.println("Enviando Correo");
+    		System.out.println("host="+host);
+    		System.out.println("port="+port);
+    		System.out.println("senderEmail="+senderEmail);
+    		System.out.println("senderName="+senderName);
+    		System.out.println("password="+password);
+    		System.out.println("recipientEmail= "+recipientEmail);
+    		System.out.println("subject="+subject);
+    		System.out.println("message="+message);
+    		
+//        	String host = "";
+//        	String port = "";
+//        	String senderEmail = "";
+//        	String senderName = "";
+//        	String password = "";
+//        	String host = "";
+            // sets SMTP server properties
+            Properties properties = new Properties();
+            properties.put("mail.smtp.host", host);
+            properties.put("mail.smtp.port", port);
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+      
+            // creates a new session with an authenticator
+            Authenticator auth = new Authenticator() {
+                public PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(senderEmail, password);
+                }
+            };
+      
+            Session session = Session.getInstance(properties, auth);
+      
+            // creates a new e-mail message
+            Message msg = new MimeMessage(session);
+      
+            msg.setFrom(new InternetAddress(senderEmail, senderName));
+            InternetAddress[] toAddresses = { new InternetAddress(recipientEmail) };
+            msg.setRecipients(Message.RecipientType.TO, toAddresses);
+            msg.setSubject(subject);
+            msg.setSentDate(new Date());
+            msg.setText(message);
+      
+            // sends the e-mail
+            Transport.send(msg);
+    	}catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
   
     }
 }
