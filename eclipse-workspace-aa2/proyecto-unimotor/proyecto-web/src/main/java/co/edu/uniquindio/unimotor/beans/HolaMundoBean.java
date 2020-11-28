@@ -2,6 +2,9 @@ package co.edu.uniquindio.unimotor.beans;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+/**
+ * Clase de inicialización de la aplicación unimotor.
+ */
 
 @Named
 @ApplicationScoped

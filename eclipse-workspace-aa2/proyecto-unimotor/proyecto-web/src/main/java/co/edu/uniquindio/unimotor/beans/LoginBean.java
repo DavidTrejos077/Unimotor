@@ -12,6 +12,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import co.edu.uniquindio.unimotor.ejb.UnimotorEJB;
 import co.edu.uniquindio.unimotor.entidades.Persona;
+/**
+ * Clase para desarrollar componentes del login.
+ */
 
 @Named
 @ApplicationScoped
@@ -49,6 +52,11 @@ public class LoginBean {
 		
 	}
 	 
+	/**
+	 * Método para iniciar sesión dado un email y una clave.
+	 */
+
+	
 	public String iniciarSesion () {
 		try {
 			persona = unimotor.iniciarSesion(persona.getEmail(), persona.getClave());
@@ -66,6 +74,10 @@ public class LoginBean {
 			return null;
 		}
 	}
+
+	/**
+	 * Método para recuperar una contraseña dado un correo. 
+	 */
 
 
 	public String recuperarPassword () {
@@ -98,6 +110,11 @@ public class LoginBean {
 		
 		return null;
 	}
+	
+	/**
+	 * Método para recetear contraseña.
+	 */
+
 	
 	public String resetCustomerPassword(String email) {
 	     

@@ -1,154 +1,98 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+   
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<h:outputStylesheet library="css" name="style.css" />
-	<h:outputStylesheet library="css" name="primeflex.css" />
-	<title>Unimotor</title>
-</h:head>
-<h:body>
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
 
-	<div id="header">
 
-		<div class="p-grid p-justify-center">
+<ui:composition template="/WEB-INF/template.xhtml">
 
-			<div class="p-col-12">
+	<ui:define name="title">Unimotor - Registrar nueva persona</ui:define>
 
-				<div class="p-grid p-align-center vertical-container">
-					<div class="p-grid p-col-2" style="text-align: left">
-						<h:form>
-							<p:commandLink action="/index?faces-redirect=true">
-								<p:graphicImage library="images" name="unimotor.png"
-									width="200px" />
-							</p:commandLink>
-						</h:form>
+	<ui:define name="content">
 
-					</div>
-					<div class="p-col-8" align="center">
-						<h:form>
-							<div class="input-search div-inline ui-inputgroup">
-								<p:inputText placeholder="¿Qué vehículo está buscando?"
-									required="true" />
-								<p:commandButton update="@form" icon="pi pi-search" />
+	
 
-							</div>
-						</h:form>
-					</div>
 
-					<div class="p-col-2" align="right">
-						<h:form>
-							<p:commandButton value="Iniciar sesion" />
-						</h:form>
-					</div>
-				</div>
-			</div>
+
+		<div id="content" align="center">
+			<p:panel header="Registro de nueva persona">
+				<h:form>
+					<p:outputLabel
+						value="InscrÃ­bete
+     Con esta cuenta podrÃ¡s entrar a Unimotor para comprar o vender carros."></p:outputLabel>
+					<h:panelGrid columns="3" cellpadding="5">
+
+
+						<p:outputLabel for="nombre_persona" value="Nombre:"></p:outputLabel>
+						<p:inputText id="nombre_persona"
+							value="#{usuarioBean.persona.nombre}" required="true">
+						</p:inputText>
+						<p:message for="nombre_persona" />
+						<p:outputLabel for="cedula_persona" value="Cedula:"></p:outputLabel>
+						<p:inputText id="cedula_persona" value="#{usuarioBean.persona.id}"
+							required="true">
+						</p:inputText>
+						<p:message for="cedula_persona" />
+						<p:outputLabel for="email_persona" value="Email:"></p:outputLabel>
+						<p:inputText id="email_persona"
+							value="#{usuarioBean.persona.email}" required="true">
+
+						</p:inputText>
+						<p:message for="email_persona" />
+						<p:outputLabel for="clave_persona" value="Clave:"></p:outputLabel>
+						<p:password id="clave_persona"
+							value="#{usuarioBean.persona.clave}" required="true">
+						</p:password>
+						<p:message for="clave_persona" />
+						<p:outputLabel for="direccion_persona" value="Direccion:"></p:outputLabel>
+						<p:inputText id="direccion_persona"
+							value="#{usuarioBean.persona.direccion}" required="true">
+						</p:inputText>
+						<p:message for="direccion_persona" />
+
+						<p:outputLabel value="Ciudad:"></p:outputLabel>
+						<p:selectOneMenu value="#{usuarioBean.persona.ciudad.id}">
+							<f:selectItem itemLabel="Seleccione" itemValue="0" />
+							<f:selectItems value="#{usuarioBean.listaCiudades}" var="ciudadT"
+								itemLabel="#{ciudadT.nombre}" itemValue="#{ciudadT.id}"></f:selectItems>
+						</p:selectOneMenu>
+
+						<br />
+						<p:outputLabel for="generoId" value="Genero:"></p:outputLabel>
+						<p:selectOneRadio id="generoId" value="#{usuarioBean.genero}"
+							unselectable="true">
+							<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+							<f:selectItem itemLabel="Femenino" itemValue="Femenino" />
+						</p:selectOneRadio>
+						<br />
+						<p:outputLabel for="tipoPersona" value="Tipo de Persona:"></p:outputLabel>
+						<p:selectOneRadio id="tipoPersona"
+							value="#{usuarioBean.tipoPersona}" unselectable="true">
+							<f:selectItem itemLabel="Cliente" itemValue="Cliente" />
+							<f:selectItem itemLabel="Vendedor" itemValue="Vendedor" />
+						</p:selectOneRadio>
+						<br />
+
+
+					</h:panelGrid>
+					<br />
+					<p:commandButton value="Registrarme" id="ajax"
+						action="#{usuarioBean.registrar}" style="margin-right:20px;"
+						styleClass="ui-priority-primary" update="@form" />
+
+					<p:messages id="messages" showDetail="true" />
+
+				</h:form>
+			</p:panel>
 		</div>
-		<div align="center">
-			<h:form>
-				<p:menubar>
-					<p:menuitem action="registroPersona?faces-redirect=true"
-						value="Registrar Persona" />
-					<p:menuitem action="registroVehiculo?faces-redirect=true"
-						value="Registrar Vehiculo" />
-					<p:menuitem action="misVehiculos?faces-redirect=true"
-						value="Mis publicaciones" />
-					<p:menuitem action="perfil?faces-redirect=true" value="Mi perfil" />
-				</p:menubar>
-			</h:form>
-		</div>
-	</div>
 
+		
 
-	<div id="content" align="center">
-		<h:form>
-			<p:outputLabel
-				value="Inscríbete
-     Con esta cuenta podrás entrar a Unimotor para comprar o vender carros."></p:outputLabel>
-			<h:panelGrid columns="3" cellpadding="5">
-
-
-				<p:outputLabel for="nombre_persona" value="Nombre:"></p:outputLabel>
-				<p:inputText id="nombre_persona"
-					value="#{usuarioBean.persona.nombre}" required="true">
-				</p:inputText>
-				<p:message for="nombre_persona" />
-				<p:outputLabel for="cedula_persona" value="Cedula:"></p:outputLabel>
-				<p:inputText id="cedula_persona" value="#{usuarioBean.persona.id}"
-					required="true">
-				</p:inputText>
-				<p:message for="cedula_persona" />
-				<p:outputLabel for="email_persona" value="Email:"></p:outputLabel>
-				<p:inputText id="email_persona" value="#{usuarioBean.persona.email}"
-					required="true">
-					
-				</p:inputText>
-				<p:message for="email_persona" />
-				<p:outputLabel for="clave_persona" value="Clave:"></p:outputLabel>
-				<p:password id="clave_persona" value="#{usuarioBean.persona.clave}"
-					required="true">
-				</p:password>
-				<p:message for="clave_persona" />
-				<p:outputLabel for="direccion_persona" value="Direccion:"></p:outputLabel>
-				<p:inputText id="direccion_persona"
-					value="#{usuarioBean.persona.direccion}" required="true">
-				</p:inputText>
-				<p:message for="direccion_persona" />
-
-				<p:outputLabel value="Ciudad:"></p:outputLabel>
-				<p:selectOneMenu value="#{usuarioBean.persona.ciudad.id}">
-					<f:selectItem itemLabel="Seleccione" itemValue="0" />
-					<f:selectItems value="#{usuarioBean.listaCiudades}" var="ciudadT"
-						itemLabel="#{ciudadT.nombre}" itemValue="#{ciudadT.id}"></f:selectItems>
-				</p:selectOneMenu>
-
-				<br />
-				<p:outputLabel for="generoId" value="Genero:"></p:outputLabel>
-				<p:selectOneRadio id="generoId" value="#{usuarioBean.genero}"
-					unselectable="true">
-					<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
-					<f:selectItem itemLabel="Femenino" itemValue="Femenino" />
-				</p:selectOneRadio>
-				<br />
-				<p:outputLabel for="tipoPersona" value="Tipo de Persona:"></p:outputLabel>
-				<p:selectOneRadio id="tipoPersona"
-					value="#{usuarioBean.tipoPersona}" unselectable="true">
-					<f:selectItem itemLabel="Cliente" itemValue="Cliente" />
-					<f:selectItem itemLabel="Vendedor" itemValue="Vendedor" />
-				</p:selectOneRadio>
-				<br />
-
-
-			</h:panelGrid>
-			<br />
-			<p:commandButton value="Registrarme" id="ajax"
-				action="#{usuarioBean.registrar}" style="margin-right:20px;"
-				styleClass="ui-priority-primary" update="@form" />
-
-			<p:messages id="messages" showDetail="true" />
-
-		</h:form>
-	</div>
-
-	<div id="footer">
-
-		<div class="p-grid p-justify-center">
-
-			<div class="p-col-10" align="center">
-
-				<p>Unimotor-2020</p>
-				<h:outputLink value="https://www.facebook.com/unimotor.compraventa">Facebook</h:outputLink>
-				<br />
-				<h:outputLink value="https://twitter.com/Unimotor2">Twitter</h:outputLink>
-				<br />
-				<h:outputLink value="https://www.instagram.com/c.r.autos/?hl=es-la">Instagram</h:outputLink>
-			</div>
-		</div>
-	</div>
-
-
-</h:body>
+	</ui:define>
+</ui:composition>
 </html>

@@ -10,6 +10,9 @@ import javax.inject.Named;
 
 import co.edu.uniquindio.unimotor.ejb.UnimotorEJB;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
+/**
+ * Clase de inicio para obtener componentes generales.
+ */
 
 @Named
 @ViewScoped
@@ -25,9 +28,20 @@ public class InicioBean implements Serializable{
 	public void inicializar () {
 		
 		vehiculos=unimotorEJB.obtenerListaVehiculos();
+		for(Vehiculo temp:vehiculos) {
+			System.out.println("Vehiculo="+temp.toString());
+		}
 		
 	}
 	
+	/**
+	 * Método para ir al detalle del vehiculo.
+	 */
+
+	public String irAlDetalle (String id) {
+		System.out.println("id="+id);
+		return "/detalleVehiculo?faces-redirect=true&amp;vehiculo="+id;
+	}
 	
 	public List<Vehiculo> getVehiculos() {
 		return vehiculos;

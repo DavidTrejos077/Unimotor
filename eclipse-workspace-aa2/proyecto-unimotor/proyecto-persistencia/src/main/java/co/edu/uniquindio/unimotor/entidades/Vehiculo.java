@@ -38,6 +38,7 @@ import javax.validation.constraints.Size;
 @NamedQuery(name = "VEHICULO_COLOR",query = "select v.descripcion , v.cilindraje, v.precio from Vehiculo v where v.color = :color"),
 @NamedQuery(name = "VEHICULO_PREGUNTAS",query = "select v, p.texto_de_la_pregunta from Vehiculo v left join v.preguntas p"),
 @NamedQuery(name = "LISTA_VEHICULO_CARACTERISTICAS",query = " select c  from Vehiculo v join v.caracteristica c where v.id = :id"),
+
 @NamedQuery(name="VEHICULO_FOTOS",query = "select v, f from Vehiculo v join v.fotoVehiculos f where v.modelo.marca.nombre = :marca and v.precio between :precioMin and :precioMax"),
 @NamedQuery(name="VEHICULO_CARACTERISTICAS",query = "select  new co.edu.uniquindio.unimotor.dto.ConsultaVehiculoCaracteristicasDTO (v) from Vehiculo v join v.caracteristica c where c.nombre IN :lista"),
 @NamedQuery (name="NUMERO_DE_VEHICULOS_CON_UNA_CARACTERISTICA_ESPECIFICA",query = "select COUNT(v) from Vehiculo v join v.caracteristica c where c.id = :id"),
@@ -55,7 +56,8 @@ import javax.validation.constraints.Size;
 @NamedQuery(name = "LISTA_VEHICULOS",query = "select v from Vehiculo v"),
 @NamedQuery(name= "VEHICULOS_POR_CIUDAD",query = " select v from Vehiculo v where v.ciudad = :ciudad"),
 @NamedQuery(name = "LISTA_PREGUNTAS_POR_PLACA",query = "select p from Vehiculo v,IN (v.preguntas) p where v.placa = :placa"),
-
+@NamedQuery(name = "LISTA_CARACTERISTICAS_VEHICULO",query = "select c from Vehiculo v join v.caracteristica c where v.id = :id"),
+@NamedQuery(name = "LISTA_VEHICULOS_EMAIL",query = "select v from Vehiculo v where v.persona.id = :id")
 
 })
 public class Vehiculo implements Serializable {
@@ -66,12 +68,12 @@ public class Vehiculo implements Serializable {
 	@Column(name = "id_vehiculo", length=12)
 	private int id;
 	
-	@NotBlank(message = "Nombre de publicacion no puede ser vacio") 
+	@NotBlank(message = "Nombre de publicacion no puede ser vacio")  
 	@Size(max=200)
 	@Column(name = "nombrePublicacion", length=200)
 	private String nombrePublicacion;
 	
-	@Positive 
+	@Positive
 	@Column(name = "precio", nullable=false)
 	private long precio;
 	
@@ -82,12 +84,12 @@ public class Vehiculo implements Serializable {
 	@Positive 
 	@Column (name = "kilometraje", nullable=false)
 	private long kilometraje;
-	 
+	
 	@NotBlank(message = "La descripcion no puede ser vacia") 
 	@Size(max=200)
 	@Column(name = "descripcion", length=200, nullable=false)
 	private String descripcion;
-	 
+	
 	@NotBlank(message = "El color no puede ser vacio")
 	@Size(max=25)
 	@Column(name = "color", length=25, nullable=false)
@@ -124,7 +126,7 @@ public class Vehiculo implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_persona", nullable=false)
-	private Cliente persona;
+	private Persona persona;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_ciudad", nullable=false)
@@ -136,8 +138,7 @@ public class Vehiculo implements Serializable {
 	
 	
 	
-
-
+	
 	@ManyToOne
 	@JoinColumn(name = "id_modelo", nullable=false)
 	private Modelo modelo;
@@ -218,7 +219,8 @@ public class Vehiculo implements Serializable {
 
 	public Vehiculo(int id, String nombrePublicacion, long precio,String placa, long kilometraje, String descripcion, String color, int anio, int cilindraje,
 			@Max(5) @Min(1) Integer numeroPuertas, TipoCombustibleEnum tipocombustible, Tranmision transmision,
-			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Cliente persona, Ciudad ciudad,
+			OpcionNuevoUsado carroNuevoUsado, TipovehiculoEnum tipovehiculo, Persona persona, Ciudad ciudad,
+			Marca marca, Modelo modelo, 
 			List<Fotovehiculo> fotoVehiculo, List<Caracteristica> caracteristica, ArrayList <String>fotoVehiculos) {
 		super();
 		this.id = id;
@@ -358,7 +360,7 @@ public class Vehiculo implements Serializable {
 
 
 
-	public Cliente getPersona() {
+	public Persona getPersona() {
 		return persona;
 	}
 
@@ -371,7 +373,7 @@ public class Vehiculo implements Serializable {
 
 
 
-	public void setPersona(Cliente persona) {
+	public void setPersona(Persona persona) {
 		this.persona = persona;
 	}
 
@@ -410,6 +412,16 @@ public class Vehiculo implements Serializable {
 
 
 
+	
+
+
+
+
+
+
+
+
+
 
 	
 
@@ -422,21 +434,7 @@ public class Vehiculo implements Serializable {
 
 
 
-
 	
-
-
-
-
-
-
-
-
-
-
-
-	
-
 
 
 
@@ -535,7 +533,6 @@ public class Vehiculo implements Serializable {
 
 
 
-
 	
 
 
@@ -550,7 +547,6 @@ public class Vehiculo implements Serializable {
 	public ArrayList<String> getFotoVehiculos() {
 		return fotoVehiculos;
 	}
-
 
 
 

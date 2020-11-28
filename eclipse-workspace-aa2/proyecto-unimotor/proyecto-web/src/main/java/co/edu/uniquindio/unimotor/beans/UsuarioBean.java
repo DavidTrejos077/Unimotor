@@ -19,6 +19,9 @@ import co.edu.uniquindio.unimotor.entidades.Ciudad;
 import co.edu.uniquindio.unimotor.entidades.Genero;
 import co.edu.uniquindio.unimotor.entidades.Persona;
 
+/**
+ * Clase para registrar un usuario.
+ */
 
 
 @Named
@@ -56,6 +59,11 @@ public class UsuarioBean implements Serializable  {
 		}
 	}
 	 
+	 
+	 /**
+		 * Método para registrar.
+		 */
+
 	 
 	public void registrar () {
 

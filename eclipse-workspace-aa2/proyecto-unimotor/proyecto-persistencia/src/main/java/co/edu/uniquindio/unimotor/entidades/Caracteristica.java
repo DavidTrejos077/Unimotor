@@ -17,7 +17,8 @@ import javax.persistence.NamedQuery;
 
 @NamedQueries ({
 	
-	@NamedQuery (name="LISTA_CARACTERISTICAS",query = "select c from Caracteristica c")
+	@NamedQuery (name="LISTA_CARACTERISTICAS",query = "select c from Caracteristica c"),
+	
 	
 	
 })

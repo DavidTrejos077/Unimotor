@@ -15,8 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
   
 /**
- * A utility class for sending e-mail messages
- * @author www.codejava.net
+ * Clase para gestionar el envío de correos
  *
  */
 public class EmailUtility {

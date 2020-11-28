@@ -6,4 +6,5 @@ http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
 	version="2.3">
 	<application>
 	</application>
+	
 </faces-config>

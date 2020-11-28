@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="primeflex.css" />
+	<h:outputScript library="js" name= "script.js"/>
+	<title><ui:insert name="title">Unimotor</ui:insert></title>
+</h:head>
+
+<h:body>
+
+
+	<div id="header">
+		<div class="p-grid p-justify-center">
+
+			<div class="p-col-10">
+
+				<div class="p-grid p-align-center vertical-container">
+					<div class=" p-col-2" align="center">
+						<h:form>
+							<p:commandLink action="/index?faces-redirect=true">
+								<p:graphicImage library="images" name="unimotor.png"
+									width="200px" />
+							</p:commandLink>
+						</h:form>
+
+					</div>
+					<div class="p-col-8" align="center">
+						<h:form>
+							<div class="input-search div-inline ui-inputgroup">
+								<p:inputText placeholder="¿Qué vehículo está buscando?"
+									required="true" value="#{busquedaBean.busqueda}" />
+								<p:commandButton update="@form" icon="pi pi-search"
+									action="#{busquedaBean.buscar}" />
+
+							</div>
+						</h:form>
+					</div>
+
+					<div class="p-col-2" align="right">
+						<h:form rendered="#{!seguridadBean.autenticado}">
+						<p:commandButton value="Iniciar Sesion"
+						oncomplete="PF('form-sesion').show()"/>
+						</h:form>
+						<h:form rendered="#{seguridadBean.autenticado}">
+						<p:splitButton id="basic" value="#{seguridadBean.persona.nombre}"
+						icon="pi pi-save">
+						<p:menuitem value= "Ir a mi perfil" icon= "pi pi-refresh" action="/usuario/miPerfil?faces-redirect=true"/>
+						<p:menuitem value= "Cerrar sesión" icon= "pi pi-times"
+						action="#{seguridadBean.cerrarSesion}"/>
+						<p:separator/>
+						</p:splitButton>
+						</h:form>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<p:dialog  widgetVar="form-sesion" header="Iniciar sesion" modal="true">
+		<h:form>
+			<h:panelGrid columns="3" >
+
+				<p:outputLabel for="email_Login" value="Email"></p:outputLabel>
+				<p:inputText id="email_Login" value="#{seguridadBean.emailLogin}"
+					>
+				</p:inputText>
+				<p:message for="email_Login" />
+
+				<p:outputLabel for="password_Login" value="Password:"></p:outputLabel>
+				<p:password id="password_Login"
+					value="#{seguridadBean.passwordLogin}" >
+				</p:password>
+				<p:message for="password_Login" />
+			</h:panelGrid>
+
+			<p:commandButton value="Iniciar Sesión" 
+				action="#{seguridadBean.autenticarUsuario}" update="@form" />
+				
+			<p:commandButton value="Recuperar Contraseña" 
+				action="#{seguridadBean.enviarCorreo}" />
+			
+			<p:growl for="mensaje-sesion" showDetail="true"></p:growl>
+		</h:form>
+		</p:dialog>
+		
+		<div align="center">
+			<h:form>
+				<p:menubar>
+					<p:menuitem rendered="#{!seguridadBean.autenticado}" action="/registroPersona?faces-redirect=true"
+						value="Registrar Persona" />
+					<p:menuitem rendered="#{seguridadBean.autenticado}" action="/usuario/registroVehiculo?faces-redirect=true"
+						value="Registrar Vehiculo" />
+					<p:menuitem rendered="#{seguridadBean.autenticado}" action="/usuario/misPublicaciones?faces-redirect=true"
+						value="Mis publicaciones" />
+					<p:menuitem  rendered="#{seguridadBean.autenticado}"  
+					value="Preguntas pendientes" />
+					<p:menuitem  rendered="#{seguridadBean.autenticado}"  
+					value="Mis favoritos" />
+				</p:menubar>
+			</h:form>
+		</div>
+	</div>
+
+
+
+	<div id="content">
+		<ui:insert name= "content">Contenido de la plantilla</ui:insert>
+	</div>
+
+	<div id="footer">
+		<div class="p-grid p-justify-center">
+
+			<div class="p-col-10" align="center">
+
+				<p>Unimotor-2020</p>
+				<h:outputLink value="https://www.facebook.com/unimotor.compraventa">Facebook</h:outputLink>
+				<br />
+				<h:outputLink value="https://twitter.com/Unimotor2">Twitter</h:outputLink>
+				<br />
+				<h:outputLink value="https://www.instagram.com/c.r.autos/?hl=es-la">Instagram</h:outputLink>
+			</div>
+		</div>
+	</div>
+
+</h:body>
+</html>

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unimotor.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -72,6 +74,16 @@ public class Persona implements Serializable {
 	
 	@Enumerated (EnumType.STRING)
 	private Genero genero;
+	
+	@OneToMany(mappedBy = "persona")
+	private List<Favorito> favoritos;
+	
+
+	@OneToMany(mappedBy = "persona")
+	private List<Pregunta> preguntas;
+	
+	@OneToMany(mappedBy = "persona")
+	private List<Vehiculo> vehiculos;
 	
 	//tenían muchos campos para los teléfonos. Con este es suficiente
 	@ElementCollection
@@ -182,6 +194,43 @@ public class Persona implements Serializable {
 
 	public void setTelefonos(Map<String, Integer> telefonos) {
 		this.telefonos = telefonos;
+	}
+	
+	
+	
+
+
+	public List<Favorito> getFavoritos() {
+		return favoritos;
+	}
+
+
+	public void setFavoritos(List<Favorito> favoritos) {
+		this.favoritos = favoritos;
+	}
+	
+	
+
+
+	public List<Pregunta> getPreguntas() {
+		return preguntas;
+	}
+
+
+	public void setPreguntas(List<Pregunta> preguntas) {
+		this.preguntas = preguntas;
+	}
+	
+	
+
+
+	public List<Vehiculo> getVehiculos() {
+		return vehiculos;
+	}
+
+
+	public void setVehiculos(List<Vehiculo> vehiculos) {
+		this.vehiculos = vehiculos;
 	}
 
 

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.unimotor.beans;
 
 
+
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -15,9 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 
 /**
- * A Java Servlet to handle requests to reset password for customer
- *
- * @author www.codejava.net
+ * Clase para hacer reset del password.
  *
  */
 @WebServlet("/reset_password")
@@ -81,6 +80,11 @@ public class ResetPasswordServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Método para generar un string aleatorio dado un email.
+	 */
+
+	
 	public String resetCustomerPassword(String email) {
 	   
 	     

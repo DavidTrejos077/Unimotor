@@ -22,14 +22,10 @@ public class Cliente extends Persona implements Serializable  {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@OneToMany(mappedBy = "cliente")
-	private List<Favorito> favoritos;
+
 	
-	@OneToMany(mappedBy = "persona")
-	private List<Pregunta> preguntas;
 	
-	@OneToMany(mappedBy = "persona")
-	private List<Vehiculo> vehiculos;
+	
 
 	public Cliente() {
 		super();
@@ -41,8 +37,8 @@ public class Cliente extends Persona implements Serializable  {
 	 */
 	public Cliente(int id, String nombre, String email, String clave, String direccion, Ciudad ciudad) {
 		super(id,nombre,email,clave,direccion,ciudad);
-		this.favoritos = new ArrayList<>();
-		this.preguntas = new ArrayList<>();
+	
+		
 	}
 	
 	/**
@@ -51,25 +47,13 @@ public class Cliente extends Persona implements Serializable  {
 	 */
 	public Cliente(int id, String nombre, String email, String clave, String direccion) {
 		super(id,nombre,email,clave,direccion);
-		this.favoritos = new ArrayList<>();
-		this.preguntas = new ArrayList<>();
+		
+		
 	}
 
-	public List<Favorito> getFavoritos() {
-		return favoritos;
-	}
+	
 
-	public void setFavoritos(List<Favorito> favoritos) {
-		this.favoritos = favoritos;
-	}
-
-	public List<Pregunta> getPreguntas() {
-		return preguntas;
-	}
-
-	public void setPreguntas(List<Pregunta> preguntas) {
-		this.preguntas = preguntas;
-	}
+	
 	
 	
    

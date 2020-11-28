@@ -9,11 +9,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.io.FilenameUtils;
@@ -22,18 +24,21 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 import org.primefaces.model.file.UploadedFiles;
 
-
 import co.edu.uniquindio.unimotor.ejb.UnimotorEJB;
 import co.edu.uniquindio.unimotor.entidades.Caracteristica;
 import co.edu.uniquindio.unimotor.entidades.Ciudad;
-import co.edu.uniquindio.unimotor.entidades.Cliente;
 import co.edu.uniquindio.unimotor.entidades.Marca;
 import co.edu.uniquindio.unimotor.entidades.Modelo;
 import co.edu.uniquindio.unimotor.entidades.OpcionNuevoUsado;
+import co.edu.uniquindio.unimotor.entidades.Persona;
 import co.edu.uniquindio.unimotor.entidades.TipoCombustibleEnum;
 import co.edu.uniquindio.unimotor.entidades.TipovehiculoEnum;
 import co.edu.uniquindio.unimotor.entidades.Tranmision;
 import co.edu.uniquindio.unimotor.entidades.Vehiculo;
+
+/**
+ * Clase para registrar un vehiculo.
+ */
 
 
 @Named
@@ -46,13 +51,19 @@ public class VehiculoBean implements Serializable {
 	@EJB
 	private UnimotorEJB unimotor;
 	
+	@Inject
+	@ManagedProperty(value="#{seguridadBean.persona}")
+	private Persona persona;
+	
 	private List<SelectItem> listaModelos = new ArrayList<SelectItem>();
 	
 	private List<SelectItem> listaMarcas = new ArrayList<SelectItem>();
 	
-	private List<SelectItem> listaCaracteristicas = new ArrayList<SelectItem>();
+	
 	
 	private List<SelectItem> listaCiudades = new ArrayList<SelectItem>();
+	
+	private List<Caracteristica> caracteristicas;
 	
 	private ArrayList <String> imagenes;
 	
@@ -72,7 +83,7 @@ public class VehiculoBean implements Serializable {
 	
 	
 	
-	private String []  caracteristica;
+	
 
 	@PostConstruct
     public void init() {
@@ -82,6 +93,9 @@ public class VehiculoBean implements Serializable {
 		Modelo modeloVehiculo = new Modelo();
 		imagenes = new ArrayList <String>();
 		vehiculo = new Vehiculo();
+		
+		caracteristicas= unimotor.obtenerListaCaracteristicas();
+		
 		
 		vehiculo.setCiudad(ciudadVehiculo);
 		vehiculo.setMarca(marcaVehiculo);
@@ -101,18 +115,18 @@ public class VehiculoBean implements Serializable {
 			select.setValue(String.valueOf(temp.getId()));
 			listaMarcas.add(select);
 		}
-		List<Caracteristica> listaCaracteristicasDB = unimotor.obtenerListaCaracteristicas();
-		for(Caracteristica temp: listaCaracteristicasDB) {
-			SelectItem select = new SelectItem();
-			select.setLabel(temp.getNombre());
-			select.setValue(String.valueOf(temp.getId()));
-			listaCaracteristicas.add(select);
-		}
+		
 		 
 	}
 
+	/**
+	 * Método para buscar modelo por marca.
+	 */
+
 
 	public void buscarModelosPorMarca(ValueChangeEvent event) {
+		
+		
 		int idMarca = (Integer) event.getNewValue();
 		Marca marcaSelecccionada = new Marca();
 		marcaSelecccionada.setId(idMarca);
@@ -126,6 +140,11 @@ public class VehiculoBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Método para cargar las imagenes.
+	 */
+
+	
 	public void subirImagenes (FileUploadEvent event) {
 		UploadedFile imagen = event.getFile();
 		String nombreImagen = subirImagen(imagen);
@@ -133,6 +152,11 @@ public class VehiculoBean implements Serializable {
 			imagenes.add(nombreImagen);
 		}
 	}
+	
+	/**
+	 * Método para subir imagen.
+	 */
+
 	
 	public String subirImagen (UploadedFile file) {
 		
@@ -153,6 +177,9 @@ public class VehiculoBean implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Método para registrar vehiculo.
+	 */
 
 	
     public void registrarVehiculo () {
@@ -169,8 +196,10 @@ public class VehiculoBean implements Serializable {
         	}else {
         		vehiculo.setCarroNuevoUsado(OpcionNuevoUsado.USADO);
         	}
-        	Cliente persona1 = unimotor.obtenerPorEmail("juanstc@gmail.com");
-        	vehiculo.setPersona(persona1);
+        	
+        	
+        	
+        	vehiculo.setPersona(persona);
         	
         	if (tipocombustible.equals("GAS")) {
         		vehiculo.setTipocombustible(TipoCombustibleEnum.GAS);
@@ -234,15 +263,7 @@ public class VehiculoBean implements Serializable {
 	}
 
 
-	public List<SelectItem> getListaCaracteristicas() {
-		return listaCaracteristicas;
-	}
-
-
-	public void setListaCaracteristicas(List<SelectItem> listaCaracteristicas) {
-		this.listaCaracteristicas = listaCaracteristicas;
-	}
-
+	
 
 	public List<SelectItem> getListaCiudades() {
 		return listaCiudades;
@@ -314,13 +335,16 @@ public class VehiculoBean implements Serializable {
 	}
 
 
-	public String[] getCaracteristica() {
-		return caracteristica;
+
+
+
+	public List<Caracteristica> getCaracteristicas() {
+		return caracteristicas;
 	}
 
 
-	public void setCaracteristica(String[] caracteristica) {
-		this.caracteristica = caracteristica;
+	public void setCaracteristicas(List<Caracteristica> caracteristicas) {
+		this.caracteristicas = caracteristicas;
 	}
     
     

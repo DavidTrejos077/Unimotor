@@ -1,5 +1,6 @@
 package co.edu.uniquindio.unimotor.ejb;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -372,15 +373,15 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	 * Método para guardar un Vehiculo como favorito.
 	 */
 	@Override
-	public void guardarVehiculoComoFavorito(Vehiculo vehiculo, Cliente cliente) throws Exception {
+	public void guardarVehiculoComoFavorito(Vehiculo vehiculo, Persona persona) throws Exception {
 
 		TypedQuery<Favorito> q = entityManager.createNamedQuery("LISTA_FAVORITOS_PERSONA", Favorito.class);
-		System.out.println(cliente.getNombre());
-		q.setParameter("email", cliente.getEmail());
+		System.out.println(persona.getNombre());
+		q.setParameter("email", persona.getEmail());
 
 		List<Favorito> l = q.getResultList();
 
-		Favorito f = new Favorito(cliente, vehiculo);
+		Favorito f = new Favorito(persona, vehiculo);
 
 		for (Favorito favorito : l) {
 
@@ -391,19 +392,19 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 		l.add(f);
 
-		cliente.setFavoritos(l);
+		persona.setFavoritos(l);
 
-		entityManager.merge(cliente);
+		entityManager.merge(persona);
 	}
 
 	/**
 	 * Método para eliminar un Vehiculo como favorito.
 	 */
 	@Override
-	public void eliminarVehiculoComoFavorito(Vehiculo vehiculo, Cliente cliente) throws NullPointerException {
+	public void eliminarVehiculoComoFavorito(Vehiculo vehiculo, Persona persona) throws NullPointerException {
 
 		TypedQuery<Favorito> q = entityManager.createNamedQuery("LISTA_FAVORITOS_PERSONA", Favorito.class);
-		q.setParameter("email", cliente.getEmail());
+		q.setParameter("email", persona.getEmail());
 
 		List<Favorito> l = q.getResultList();
 
@@ -415,9 +416,9 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 			}
 		}
 
-		cliente.setFavoritos(l);
+		persona.setFavoritos(l);
 
-		entityManager.merge(cliente);
+		entityManager.merge(persona);
 
 	}
 
@@ -433,6 +434,46 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		pregunta.getVehiculo().setPreguntas(l);
 
 		entityManager.merge(pregunta.getVehiculo());
+	}
+	
+	@Override
+	public Vehiculo obtenerVehiculo (Integer id) {
+		return entityManager.find(Vehiculo.class, id);
+	}
+	
+	@Override
+	public List <Pregunta> obtenerPreguntasVehiculo (Integer codigoV){
+		TypedQuery<Pregunta>q =entityManager.createNamedQuery("LISTA_PREGUNTAS", Pregunta.class);
+		q.setParameter("id", codigoV);
+		return q.getResultList();
+	}
+	
+	@Override
+	public List <Caracteristica> obtenerCaracteristicasVehiculo (Integer codigoV){
+		TypedQuery<Caracteristica>q =entityManager.createNamedQuery("LISTA_CARACTERISTICAS_VEHICULO", Caracteristica.class);
+		q.setParameter("id", codigoV);
+		return q.getResultList();
+	}
+	
+	@Override
+    public Pregunta hacerPregunta (Persona persona, Vehiculo vehiculo, String texto_de_la_pregunta)throws Exception {
+		try {
+			
+		
+		Pregunta pregunta = null;
+		
+		if(persona!=null&&vehiculo!=null) {
+			
+			pregunta = new Pregunta(texto_de_la_pregunta, persona, vehiculo);
+			entityManager.persist(pregunta);
+		}else {
+			throw new Exception("Es necesario definir una persona y un vehiculo para registrar la pregunta");
+		}
+		
+		return pregunta;
+		}catch (Exception e) {
+			throw new Exception("Hubo un error al momento de registrar la pregunta");
+		}
 	}
 
 	@Override
@@ -641,6 +682,20 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		TypedQuery<Vehiculo> q= entityManager.createNamedQuery("BUSCAR_VEHICULOS", Vehiculo.class);
 		q.setParameter("busqueda", "%" +busqueda+ "%");
 		return q.getResultList();
+	}
+
+	@Override
+	public Caracteristica obtenerCaracteristica(Integer id) {
+		return entityManager.find(Caracteristica.class,id);
+	}
+
+	public List<Vehiculo> buscarVehiculosPorCliente(int id) {
+		TypedQuery<Vehiculo> q = entityManager.createNamedQuery("LISTA_VEHICULOS_EMAIL", Vehiculo.class);
+		q.setParameter("id", id);
+		List<Vehiculo> l = q.getResultList();
+
+		System.out.println(l);
+		return l;
 	}
 
 }

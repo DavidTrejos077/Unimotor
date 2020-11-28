@@ -24,7 +24,8 @@ import javax.persistence.TemporalType;
 @NamedQueries ({
 	                                                              //Seleccioneme todas las personas que hicieron una pregunta sobre este carro especifico
 	@NamedQuery (name = "LISTA_PERSONAS_PREGUNTA_VEHICULO",query = "select distinct p.persona from Pregunta p where p.vehiculo.id = :id"),
-	@NamedQuery(name= "LISTA_PREGUNTAS_POR_CADA_VEHICULO",query = "select p from Pregunta p group by p.vehiculo")
+	@NamedQuery(name= "LISTA_PREGUNTAS_POR_CADA_VEHICULO",query = "select p from Pregunta p group by p.vehiculo"),
+	@NamedQuery(name="LISTA_PREGUNTAS", query = "select p from Pregunta p where p.vehiculo.id = :id")
 })
 
 public class Pregunta implements Serializable {
