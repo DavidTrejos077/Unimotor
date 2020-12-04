@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -75,13 +76,15 @@ public class Persona implements Serializable {
 	@Enumerated (EnumType.STRING)
 	private Genero genero;
 	
+	@JsonbTransient
 	@OneToMany(mappedBy = "persona")
 	private List<Favorito> favoritos;
 	
-
+	@JsonbTransient
 	@OneToMany(mappedBy = "persona")
 	private List<Pregunta> preguntas;
 	
+	@JsonbTransient
 	@OneToMany(mappedBy = "persona")
 	private List<Vehiculo> vehiculos;
 	

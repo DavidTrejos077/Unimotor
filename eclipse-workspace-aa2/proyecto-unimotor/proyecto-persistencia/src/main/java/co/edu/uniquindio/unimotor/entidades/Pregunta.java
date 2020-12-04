@@ -3,6 +3,7 @@ package co.edu.uniquindio.unimotor.entidades;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,10 +45,12 @@ public class Pregunta implements Serializable {
 	@Column(name = "fecha", nullable=true)
 	private Date fecha;
 	
+	@JsonbTransient
 	@ManyToOne
 	@JoinColumn(name = "id_persona", nullable=false)
 	private Persona persona;
 	
+	@JsonbTransient
 	@ManyToOne
 	@JoinColumn(name = "id_vehiculo", nullable=false)
 	private Vehiculo vehiculo;

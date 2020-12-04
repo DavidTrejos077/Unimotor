@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -53,11 +54,12 @@ import javax.validation.constraints.Size;
 @NamedQuery (name = "CANTIDAD_VEHICULOS_POR_MODELO",query = "select count (v) from Vehiculo v group by v.modelo order by v.marca.nombre asc"),
 @NamedQuery (name = "CARACTERISTICA_COMUN_VEHICULOS",query = "select max (c.nombre) from Vehiculo v join v.caracteristica c"),
 @NamedQuery (name = "BUSCAR_VEHICULO_POR_PLACA",query = "select v from Vehiculo v where v.placa = :placa"),
-@NamedQuery(name = "LISTA_VEHICULOS",query = "select v from Vehiculo v"),
+@NamedQuery(name = "LISTA_VEHICULOS_NOMBREPUBLICACION",query = "select v from Vehiculo v where v.nombrePublicacion like :nombrePublicacion"),
 @NamedQuery(name= "VEHICULOS_POR_CIUDAD",query = " select v from Vehiculo v where v.ciudad = :ciudad"),
 @NamedQuery(name = "LISTA_PREGUNTAS_POR_PLACA",query = "select p from Vehiculo v,IN (v.preguntas) p where v.placa = :placa"),
 @NamedQuery(name = "LISTA_CARACTERISTICAS_VEHICULO",query = "select c from Vehiculo v join v.caracteristica c where v.id = :id"),
-@NamedQuery(name = "LISTA_VEHICULOS_EMAIL",query = "select v from Vehiculo v where v.persona.id = :id")
+@NamedQuery(name = "LISTA_VEHICULOS_EMAIL",query = "select v from Vehiculo v where v.persona.id = :id"),
+@NamedQuery (name="LISTA_VEHICULOS",query = "select v from Vehiculo v")
 
 })
 public class Vehiculo implements Serializable {
@@ -124,6 +126,7 @@ public class Vehiculo implements Serializable {
 	@Enumerated (EnumType.STRING)
 	private TipovehiculoEnum tipovehiculo;
 	
+	@JsonbTransient
 	@ManyToOne
 	@JoinColumn(name = "id_persona", nullable=false)
 	private Persona persona;
@@ -143,12 +146,12 @@ public class Vehiculo implements Serializable {
 	@JoinColumn(name = "id_modelo", nullable=false)
 	private Modelo modelo;
 	
-	
+	@JsonbTransient
 	@OneToMany(mappedBy = "vehiculo")
 	@JoinColumn(nullable=true)
 	private List<Favorito> favoritos;
 	
-	
+	@JsonbTransient
 	@OneToMany(mappedBy = "vehiculo")
 	@JoinColumn(nullable=true)
 	private List<Pregunta> preguntas;

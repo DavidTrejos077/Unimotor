@@ -194,9 +194,10 @@ public interface UnimotorEJBRemote {
 
 	/**
 	 * Método para obtener un vehiculo dado un id.
+	 * @throws Exception 
 	 */
 
-	Vehiculo obtenerVehiculo(Integer id);
+	Vehiculo obtenerVehiculo(Integer id) throws Exception;
 
 	/**
 	 * Método para obtener la lista de pregunta dado un codigoV.
@@ -221,5 +222,50 @@ public interface UnimotorEJBRemote {
 	 */
 
 	Caracteristica obtenerCaracteristica (Integer id);
+	
+	/**
+	 * Método para obtener la marca dado un id.
+	 */
+	Marca obtenerMarca(Integer id) throws Exception;
+	
+	/**
+	 * Método para guardar la marca.
+	 */
+	void guardarMarca(Marca marca) throws Exception;
+	/**
+	 * Método para eliminar la marca de acuerdo a un id.
+	 */
+	void eliminarMarca(Integer id) throws Exception;
+	
+	/**
+	 * Método para actualizar la marca.
+	 */
+	void actualizarMarca(Marca marca) throws Exception;
+	/**
+	 * Método para guardar un vehiculo.
+	 */
+	void guardarVehiculo(Vehiculo vehiculo) throws Exception;
+	/**
+	 * Método para eliminar vehiculo de acuerdo a un id.
+	 */
+	void eliminarVehiculo(Integer id) throws Exception;
+	
+	/**
+	 * Método para actualizar un vehiculo.
+	 */
+	void actualizarVehiculo(Vehiculo vehiculo) throws Exception;
+	
+	/**
+	 * Método para obtener una persona.
+	 */
+	Persona obtenerPersona(Integer id) throws Exception;
+	/**
+	 * Método para actualizar una persona.
+	 */
+	void actualizarPersona(Persona persona) throws Exception;
+	/**
+	 * Método para eliminar Persona de acuerdo a un id.
+	 */
+	void eliminarPersona(Integer id) throws Exception;
 
 }

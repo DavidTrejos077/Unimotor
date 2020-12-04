@@ -10,6 +10,29 @@
 	<ui:define name="title">#{detalleVehiculo.vehiculo.nombrePublicacion}</ui:define>
 
 	<ui:define name="content">
+	
+	<div id="fb-root"></div>
+<script async="true" defer= "true" crossorigin="anonymous" 
+src="https://connect.facebook.net/es_LA/sdk.js#xfbml=1&amp;version=v9.0&amp;
+autoLogAppEvents=1"
+nonce="KXK5wvDk"></script>
+
+		<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
 
 		<div class="p-grid nested-grid">
 
@@ -17,7 +40,8 @@
 
 				<div class="box box-stretched">
 
-					<p:galleria var="imagen" value="#{detalleVehiculo.vehiculo.fotoVehiculos}"
+					<p:galleria var="imagen"
+						value="#{detalleVehiculo.vehiculo.fotoVehiculos}"
 						panelHeight="425">
 
 						<p:graphicImage styleClass="imagen-vehiculo"
@@ -42,9 +66,19 @@
 						<h2>Precio: $ #{detalleVehiculo.vehiculo.precio}</h2>
 					</div>
 					<div class="box">
-						<h3>Vendedor:
-							#{detalleVehiculo.vehiculo.persona.nombre}</h3>
+						<h3>Vendedor: #{detalleVehiculo.vehiculo.persona.nombre}</h3>
 						<h3>Ciudad: #{detalleVehiculo.vehiculo.ciudad.nombre}</h3>
+
+                        <div class="fb-share-button" data-href="https://www.uniquindio.edu.co/" 
+                        data-layout="button_count" data-size="small">
+                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.uniquindio.edu.co%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Compartir</a></div>
+						
+						<a class="twitter-share-button"
+							href="https://twitter.com/intent/tweet?text=Revisa%20este%20vehiculo"
+							data-size="large" 
+							data-url="http://localhost:8080/proyecto-web/
+							detalleVehiculo.xhtml?vehiculo=#{detalleVehiculo.vehiculo.id}">
+							Tweet</a>
 
 					</div>
 					<p:dataList

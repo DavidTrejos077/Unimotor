@@ -99,6 +99,154 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	}
 
 	/**
+	 * Método para obtener la marca de acuerdo a un id.
+	 */
+
+	@Override
+	public Marca obtenerMarca (Integer id) throws Exception {
+		Marca m= entityManager.find(Marca.class, id);
+		if(m!=null) {
+			return m;
+		}else {
+			throw new Exception("La marca no existe");
+		}
+	}
+
+	/**
+	 * Método para buscar el nombre de la marca.
+	 */
+
+	public boolean buscarNombreMarca (String nombreMarca) {
+
+		TypedQuery<Marca> q= entityManager.createNamedQuery("MARCA_POR_NOMBRE", Marca.class);
+		q.setParameter("nombre", nombreMarca);
+
+		List <Marca> l =q.getResultList();
+
+		if (l.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * Método para buscar el vehiculo dado una placa.
+	 */
+
+	public boolean buscarVehiculo (String placa) {
+
+		TypedQuery<Vehiculo> q= entityManager.createNamedQuery("BUSCAR_VEHICULO_POR_PLACA", Vehiculo.class);
+		q.setParameter("placa", placa);
+
+		List <Vehiculo> l =q.getResultList();
+
+		if (l.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Método para guardar la marca.
+	 */
+
+	@Override
+	public void guardarMarca (Marca marca)throws Exception{
+		if (buscarNombreMarca (marca.getNombre())) {
+			throw new Exception("El nombre de la marca ya está registrado");
+		}
+		entityManager.persist(marca);
+	}
+	
+
+	/**
+	 * Método para guardar un vehiculo.
+	 */
+
+	@Override
+	public void guardarVehiculo (Vehiculo vehiculo)throws Exception{
+		if (buscarVehiculo (vehiculo.getPlaca())) {
+			throw new Exception("El vehiculo  ya está registrado");
+		}
+		entityManager.persist(vehiculo);
+	}
+	
+
+	/**
+	 * Método para eliminar la marca de acuerdo a un id.
+	 */
+	@Override
+	public void eliminarMarca (Integer id)throws Exception {
+		Marca marca = entityManager.find(Marca.class, id);
+		if (marca!=null) {
+			entityManager.remove(marca);
+		}else {
+			throw new Exception("La marca no existe");
+		}
+	}
+	
+	/**
+	 * Método para eliminar vehiculo de acuerdo a un id.
+	 */
+	@Override
+	public void eliminarVehiculo (Integer id)throws Exception {
+		Vehiculo vehiculo = entityManager.find(Vehiculo.class, id);
+		if (vehiculo!=null) {
+			entityManager.remove(vehiculo);
+		}else {
+			throw new Exception("El Vehiculo no existe");
+		}
+	}
+	
+	/**
+	 * Método para eliminar Persona de acuerdo a un id.
+	 */
+	@Override
+	public void eliminarPersona (Integer id)throws Exception {
+		Persona persona = entityManager.find(Persona.class, id);
+		if (persona!=null) {
+			entityManager.remove(persona);
+		}else {
+			throw new Exception("La persona no existe");
+		}
+	}
+	
+	/**
+	 * Método para actualizar un vehiculo.
+	 */
+	
+	@Override	
+	public void actualizarVehiculo (Vehiculo vehiculo )throws Exception {
+		if (vehiculo!=null) {
+			entityManager.merge(vehiculo);
+		}else {
+			throw new Exception("El vehiculo es null");
+		}
+	}
+	
+	/**
+	 * Método para actualizar una persona.
+	 */
+	
+	@Override	
+	public void actualizarPersona (Persona persona )throws Exception {
+		if (persona!=null) {
+			entityManager.merge(persona);
+		}else {
+			throw new Exception("La persona es null");
+		}
+	}
+	
+	@Override	
+	public void actualizarMarca (Marca marca )throws Exception {
+		if (marca!=null) {
+			entityManager.merge(marca);
+		}else {
+			throw new Exception("La marca es null");
+		}
+	}
+	/**
 	 * Método para registrar un vendedor en la base de datos.
 	 */
 
@@ -155,7 +303,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	 * Método para buscar una persona existente en la base de datos de acuerdo a un
 	 * email dado
 	 */
-	
+
 	/**
 	 * Este método les funciona?Si profe
 	 * @param email
@@ -231,7 +379,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 	public boolean buscarVehiculoPorPlaca(String placa) {
 
 		TypedQuery<Vehiculo> q = entityManager.createNamedQuery("BUSCAR_VEHICULO_POR_PLACA", Vehiculo.class);
-		q.setParameter("placa", placa); // placa que llega por parametro le enviamos.
+		q.setParameter("placa", placa); 
 		List<Vehiculo> l = q.getResultList();
 
 		if (l.isEmpty()) {
@@ -435,42 +583,59 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 		entityManager.merge(pregunta.getVehiculo());
 	}
-	
+
 	@Override
-	public Vehiculo obtenerVehiculo (Integer id) {
-		return entityManager.find(Vehiculo.class, id);
+	public Vehiculo obtenerVehiculo (Integer id)throws Exception {
+
+		Vehiculo v= entityManager.find(Vehiculo.class, id);
+
+		if (v== null) {
+			throw new Exception("El id del vehiculo no existe");
+		}
+		return v;
 	}
 	
+	@Override
+	public Persona obtenerPersona (Integer id)throws Exception {
+
+		Persona p= entityManager.find(Persona.class, id);
+
+		if (p== null) {
+			throw new Exception("El id de la persona no existe");
+		}
+		return p;
+	}
+
 	@Override
 	public List <Pregunta> obtenerPreguntasVehiculo (Integer codigoV){
 		TypedQuery<Pregunta>q =entityManager.createNamedQuery("LISTA_PREGUNTAS", Pregunta.class);
 		q.setParameter("id", codigoV);
 		return q.getResultList();
 	}
-	
+
 	@Override
 	public List <Caracteristica> obtenerCaracteristicasVehiculo (Integer codigoV){
 		TypedQuery<Caracteristica>q =entityManager.createNamedQuery("LISTA_CARACTERISTICAS_VEHICULO", Caracteristica.class);
 		q.setParameter("id", codigoV);
 		return q.getResultList();
 	}
-	
+
 	@Override
-    public Pregunta hacerPregunta (Persona persona, Vehiculo vehiculo, String texto_de_la_pregunta)throws Exception {
+	public Pregunta hacerPregunta (Persona persona, Vehiculo vehiculo, String texto_de_la_pregunta)throws Exception {
 		try {
-			
-		
-		Pregunta pregunta = null;
-		
-		if(persona!=null&&vehiculo!=null) {
-			
-			pregunta = new Pregunta(texto_de_la_pregunta, persona, vehiculo);
-			entityManager.persist(pregunta);
-		}else {
-			throw new Exception("Es necesario definir una persona y un vehiculo para registrar la pregunta");
-		}
-		
-		return pregunta;
+
+
+			Pregunta pregunta = null;
+
+			if(persona!=null&&vehiculo!=null) {
+
+				pregunta = new Pregunta(texto_de_la_pregunta, persona, vehiculo);
+				entityManager.persist(pregunta);
+			}else {
+				throw new Exception("Es necesario definir una persona y un vehiculo para registrar la pregunta");
+			}
+
+			return pregunta;
 		}catch (Exception e) {
 			throw new Exception("Hubo un error al momento de registrar la pregunta");
 		}
@@ -656,7 +821,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 		entityManager.merge(persona);
 	}
 
-	
+
 	@Override
 	public void registrarPersona (Persona persona) throws Exception {
 
@@ -678,7 +843,7 @@ public class UnimotorEJB implements UnimotorEJBRemote {
 
 	@Override
 	public List<Vehiculo> buscarVehiculos(String busqueda) {
-		
+
 		TypedQuery<Vehiculo> q= entityManager.createNamedQuery("BUSCAR_VEHICULOS", Vehiculo.class);
 		q.setParameter("busqueda", "%" +busqueda+ "%");
 		return q.getResultList();
